@@ -79,6 +79,7 @@ public class WaveSpawner : MonoBehaviour
     void StartNextWave()// *Alex kallar på den*
     {
         currentWaveNumber++;
+        enemiesPerWave++;
         enemiesToSpawnThisWave = enemiesPerWave; // Reset for the new wave
         enemiesCurrentlyAlive = 0; // Reset count of active enemies (they will be counted as spawned)
         waveInProgress = true; // A new wave is starting
