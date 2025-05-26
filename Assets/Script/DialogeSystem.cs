@@ -27,6 +27,8 @@ public class DialogeSystem : MonoBehaviour
 
     bool writeText = false;
 
+    GameObject currentChoiceText;
+
     #endregion
 
     private void Start()
@@ -117,10 +119,20 @@ public class DialogeSystem : MonoBehaviour
 
         // - Patiance
 
+        if (currentChoiceText != null)
+        {
+
+            currentChoiceText.GetComponentInChildren<TextMeshProUGUI>().text = textToWrite;
+            currentChoiceText.SetActive(false);
+
+        }
+
         dialogueInBundle[onWhatDialogue - 1].SetActive(false);
 
-        WrongText.SetActive(true);
-        WhatTextToWrite(WrongText.GetComponentInChildren<TextMeshProUGUI>());
+        currentChoiceText = WrongText;
+
+        currentChoiceText.SetActive(true);
+        WhatTextToWrite(currentChoiceText.GetComponentInChildren<TextMeshProUGUI>());
 
 
     }
@@ -148,9 +160,9 @@ public class DialogeSystem : MonoBehaviour
 
         }
 
-        dialogueInBundle[onWhatDialogue].SetActive(true);
-
         onWhatDialogue++;
+
+        NextDialogue();
 
     }
 
