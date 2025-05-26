@@ -1,21 +1,171 @@
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DialogeSystem : MonoBehaviour
 {
-    
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] List<GameObject> dialogeBundle = new List<GameObject>();
+    List<GameObject> dialogueInBundle = new List<GameObject>();
+
+    [SerializeField] List<GameObject> choiceBundle = new List<GameObject>();
+
+    int onWhatDialogueBundle = 0;
+    int onWhatDialogue = 0;
+
+    bool doingChoice = false;
+
+    #region Text
+
+    TextMeshProUGUI text;
+    string textToWrite;
+    int characterIndex;
+    float timePerCharacter = 0.1f;
+    float timer;
+
+    bool writeText = false;
+
+    #endregion
+
+    private void Start()
     {
-        
+        onWhatDialogueBundle = 0;
+
+        foreach (Transform child in dialogeBundle[onWhatDialogueBundle].transform)
+        {
+
+            dialogueInBundle.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+
+        }
+
+        dialogueInBundle[onWhatDialogue].SetActive(true); // Start Dialogue
+        WhatTextToWrite(dialogueInBundle[onWhatDialogue].GetComponentInChildren<TextMeshProUGUI>());
+
+        onWhatDialogue++;
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+
+        if (writeText)
+        {
+
+            timer -= Time.deltaTime;
+
+            if(timer <= 0)
+            {
+     
+                timer += timePerCharacter;
+                characterIndex++;
+                text.text = textToWrite.Substring(0, characterIndex);
+
+                if(characterIndex >= textToWrite.Length)
+                {
+
+                    writeText = false;
+
+                }
+
+            }
+
+        }
+
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice)
+        {
+
+            NextDialogue();
+
+        }
+
     }
 
-    
+    void NextDialogue()
+    {
+
+        if (onWhatDialogue >= dialogueInBundle.Count)
+        {
+            doingChoice = true;
+            NextChoice();
+
+            return;
+
+        }
+
+        dialogueInBundle[onWhatDialogue - 1].SetActive(false);
+        dialogueInBundle[onWhatDialogue].SetActive(true);
+        WhatTextToWrite(dialogueInBundle[onWhatDialogue].GetComponentInChildren<TextMeshProUGUI>());
+
+        onWhatDialogue++;
+
+    }
+
+    void NextChoice()
+    {
+
+        choiceBundle[onWhatDialogueBundle].SetActive(true);
+
+    }
+
+    #region Choices
+
+    public void WrongChoice(GameObject WrongText)
+    {
+
+        // - Patiance
+
+        dialogueInBundle[onWhatDialogue - 1].SetActive(false);
+
+        WrongText.SetActive(true);
+        WhatTextToWrite(WrongText.GetComponentInChildren<TextMeshProUGUI>());
+
+
+    }
+
+    public void RightChoice()
+    {
+
+        doingChoice = false;
+
+        dialogueInBundle[onWhatDialogue - 1].SetActive(false);
+        choiceBundle[onWhatDialogueBundle].SetActive(false);
+        dialogueInBundle.Clear();
+
+        onWhatDialogue = 0;
+
+        onWhatDialogueBundle++;
+
+        dialogeBundle[onWhatDialogueBundle].SetActive(true);
+
+        foreach (Transform child in dialogeBundle[onWhatDialogueBundle].transform)
+        {
+
+            dialogueInBundle.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+
+        }
+
+        dialogueInBundle[onWhatDialogue].SetActive(true);
+
+        onWhatDialogue++;
+
+    }
+
+    #endregion
+
+    void WhatTextToWrite(TextMeshProUGUI textToChange)
+    {
+
+        text = textToChange;
+        textToWrite = textToChange.text;
+        textToChange.text = "";
+        characterIndex = 0;
+
+        writeText = true;
+
+    }
+
 }
