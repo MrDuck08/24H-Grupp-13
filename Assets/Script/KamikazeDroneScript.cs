@@ -17,6 +17,7 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float startScale = 0.35f;
     [SerializeField] float endScale = 2f;
     [SerializeField] float scaleDuration = 30f;
+    [SerializeField] float warningTime = 3f;
 
     [Header("Destruction Settings")]
     [SerializeField] float fallSpeed = 5f;
@@ -25,9 +26,8 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] GameObject droneParticleEffect, electicEffect, explotionEffect;
     [SerializeField] AudioClip destructionSound, explotionSound;
 
+    [SerializeField] float blinkTime = 0.2f;
     [SerializeField] float deathCanvasDelay = 2f;
-    [SerializeField] float swapSceneDelay = 1.5f;
-    [SerializeField] GameObject deathCanvas;
 
     int horizontalDirection = 0;
     int verticalDirection = 0;
@@ -45,9 +45,12 @@ public class KamikazeDroneScript : MonoBehaviour
     float currentScaleTime = 0f;
 
     bool isDestroyed = false;
+    bool isGoingToExplode = false;
+    bool isBlinking = false;
 
     SpriteRenderer droneSprite;
     SceneLoader sceneLoader;
+    DeathCanvasManager deathCanvasManager;
 
     enum MovementAxis { None, Horizontal, Vertical }
     MovementAxis lastChosenAxis = MovementAxis.None;
@@ -63,9 +66,10 @@ public class KamikazeDroneScript : MonoBehaviour
             return;
         }
 
+        deathCanvasManager = FindAnyObjectByType<DeathCanvasManager>();
+
         droneParticleEffect.SetActive(false);
         electicEffect.SetActive(false);
-        deathCanvas.SetActive(false);
 
         droneHalfWidth = droneSprite.bounds.extents.x;
         droneHalfHeight = droneSprite.bounds.extents.y;
@@ -162,12 +166,12 @@ public class KamikazeDroneScript : MonoBehaviour
         if (lastChosenAxis == MovementAxis.Horizontal && consecutiveHorizontalCount >= maxConsecutiveHorizontal)
         {
             canChooseHorizontal = false;
-            Debug.Log("Horizontal limit reached. Forcing Vertcial.");
+            //Debug.Log("Horizontal limit reached. Forcing Vertcial.");
         }
         else if (lastChosenAxis == MovementAxis.Vertical && consecutiveVerticalCount >= maxConsecutiveVertical)
         {
             canChooseVertical = false;
-            Debug.Log("Vertical limit reached. Forcing Horizontal.");
+            //Debug.Log("Vertical limit reached. Forcing Horizontal.");
         }
 
         MovementAxis chosenAxis;
@@ -229,29 +233,47 @@ public class KamikazeDroneScript : MonoBehaviour
 
         transform.localScale = new Vector3(newScale, newScale, 1);
 
-        if (startScale >= endScale)
+        if (newScale >= endScale)
         {
-            DroneExplode();
+            warningTime -= Time.deltaTime;
+
+            if (!isBlinking)
+            {
+                isBlinking = true;
+
+                StartCoroutine(BlinkingSprite());
+            }
+
+            if (warningTime <= 0 && !isGoingToExplode)
+            {
+                isGoingToExplode = true;
+                StartCoroutine(DroneExplode());
+            }
         }
     }
 
-    void DroneExplode()
+    IEnumerator BlinkingSprite()
+    {
+        while (!isGoingToExplode)
+        {
+            droneSprite.color = Color.red;
+
+            yield return new WaitForSeconds(blinkTime);
+
+            droneSprite.color = Color.white;
+
+            yield return new WaitForSeconds(blinkTime);
+        }
+    }
+    IEnumerator DroneExplode()
     {
         Debug.Log("THE DRONE HAS EXPLODED!!!!!");
         Instantiate(explotionEffect, transform.position, Quaternion.identity);
-        StartCoroutine(PLayerDeath());
-        enabled = false;
-    }
 
-    IEnumerator PLayerDeath()
-    {
         yield return new WaitForSeconds(deathCanvasDelay);
 
-        deathCanvas.SetActive(true);
-
-        yield return new WaitForSeconds(swapSceneDelay);
-
-        sceneLoader.LoadSceneByIndex(0);
+        deathCanvasManager.ControllCanvasOfAndOn(true);
+        Time.timeScale = 0;
     }
 
     public void DroneDestroyed()

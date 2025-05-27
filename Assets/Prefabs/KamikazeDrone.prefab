@@ -149,7 +149,12 @@ MonoBehaviour:
   DroneParticalEffectTime: 0.3
   droneParticleEffect: {fileID: 363798635336574056}
   electicEffect: {fileID: 8964806021011464804}
+  explotionEffect: {fileID: 8525205791703757876, guid: 9fd832a5af7bd8644904d6a9044c93f5, type: 3}
   destructionSound: {fileID: 0}
+  explotionSound: {fileID: 0}
+  deathCanvasDelay: 2
+  swapSceneDelay: 1.5
+  deathCanvas: {fileID: 0}
 --- !u!61 &1168115812025716281
 BoxCollider2D:
   m_ObjectHideFlags: 0
