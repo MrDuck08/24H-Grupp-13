@@ -484,7 +484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5d465cd87ff1648ab36c684cf7dcfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 8163727705689472560, guid: 4c7518b5408753946bb2f6b837e7a9a4, type: 3}
+  enemyPrefab: {fileID: 3958463607827153138, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
   enemySpawnInterval: 0.5
   enemiesPerWave: 20
   timeBetweenWaves: 5
+  maxAddTimeToWave: 5

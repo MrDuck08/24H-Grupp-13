@@ -1,6 +1,6 @@
+using System.Collections;
 using UnityEngine;
-// They will grow and get closer to the player faster as the game progress
-// They will move slighly faster as the game progress but won't move way to fast
+// New sprites will replace the old as it grows?
 public class KamikazeDroneScript : MonoBehaviour
 {
     [Header("Movement settings")]
@@ -12,6 +12,18 @@ public class KamikazeDroneScript : MonoBehaviour
     [Header("Consecutive Direction Limits")]
     [SerializeField] int maxConsecutiveHorizontal = 3;
     [SerializeField] int maxConsecutiveVertical = 3;
+
+    [Header("Scaling Effect")]
+    [SerializeField] float startScale = 0.35f;
+    [SerializeField] float endScale = 2f;
+    [SerializeField] float scaleDuration = 30f;
+
+    [Header("Destruction Settings")]
+    [SerializeField] float fallSpeed = 5f;
+    [SerializeField] float destroyDelay = 15f;
+    [SerializeField] float DroneParticalEffectTime = 0.3f;
+    [SerializeField] GameObject droneParticleEffect, electicEffect;
+    [SerializeField] AudioClip destructionSound;
 
     int horizontalDirection = 0;
     int verticalDirection = 0;
@@ -26,7 +38,12 @@ public class KamikazeDroneScript : MonoBehaviour
     float droneHalfWidth;
     float droneHalfHeight;
 
+    float currentScaleTime = 0f;
+
+    bool isDestroyed = false;
+
     SpriteRenderer droneSprite;
+
 
     enum MovementAxis { None, Horizontal, Vertical }
     MovementAxis lastChosenAxis = MovementAxis.None;
@@ -42,6 +59,9 @@ public class KamikazeDroneScript : MonoBehaviour
             return;
         }
 
+        droneParticleEffect.SetActive(false);
+        electicEffect.SetActive(false);
+
         droneHalfWidth = droneSprite.bounds.extents.x;
         droneHalfHeight = droneSprite.bounds.extents.y;
 
@@ -54,13 +74,23 @@ public class KamikazeDroneScript : MonoBehaviour
         SetNextChangeDirectionTime();
         ChooseRandomDirections();
 
-        Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
+        transform.localScale = new Vector3(startScale, startScale, 1);
+
+        //Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
     }
 
     void Update()
     {
-        Movement();
-        CheckForDirectionChange();
+        if (!isDestroyed)
+        {
+            Movement();
+            CheckForDirectionChange();
+            HandleScaling();
+        }
+        else
+        {
+            transform.position += Vector3.down * fallSpeed * Time.deltaTime;
+        }
     }
 
     void Movement()
@@ -160,8 +190,8 @@ public class KamikazeDroneScript : MonoBehaviour
             lastChosenAxis = MovementAxis.Horizontal;
             consecutiveHorizontalCount++;
             consecutiveVerticalCount = 0;
-            Debug.Log($"New Directions: Purely Horizontal = {horizontalDirection}. " +
-                $"Consecutive H: {consecutiveHorizontalCount}/{maxConsecutiveHorizontal}");
+            /*Debug.Log($"New Directions: Purely Horizontal = {horizontalDirection}. " +
+                $"Consecutive H: {consecutiveHorizontalCount}/{maxConsecutiveHorizontal}");*/
         }
         else
         {
@@ -169,8 +199,8 @@ public class KamikazeDroneScript : MonoBehaviour
             lastChosenAxis = MovementAxis.Vertical;
             consecutiveVerticalCount++;
             consecutiveHorizontalCount = 0;
-            Debug.Log($"New Directions: Purely Vertical = {verticalDirection}. " +
-                $"Consecutive V: {consecutiveVerticalCount}/{maxConsecutiveVertical}");
+            /*Debug.Log($"New Directions: Purely Vertical = {verticalDirection}. " +
+                $"Consecutive V: {consecutiveVerticalCount}/{maxConsecutiveVertical}");*/
         }
     }
 
@@ -179,6 +209,57 @@ public class KamikazeDroneScript : MonoBehaviour
         float randomInterval = Random.Range(minChangeDirectionTime, maxChangeDirectionTime);
         nextChangeDirectionTime = Time.time + randomInterval;
 
-        Debug.Log($"Next direction change in: {randomInterval} seconds (at Time.time {nextChangeDirectionTime})");
+        //Debug.Log($"Next direction change in: {randomInterval} seconds (at Time.time {nextChangeDirectionTime})");
+    }
+
+    void HandleScaling()
+    {
+        currentScaleTime += Time.deltaTime;
+
+        float t = Mathf.Clamp01(currentScaleTime / scaleDuration);
+
+        float newScale = Mathf.Lerp(startScale, endScale, t);
+
+        transform.localScale = new Vector3(newScale, newScale, 1);
+
+        if (currentScaleTime > 30f)
+        {
+
+
+            Debug.Log("THE DRONE HAS EXPLODED!!!!!");
+            enabled = false;
+        }
+    }
+
+    public void DroneDestroyed()
+    {
+        if (isDestroyed) return;
+
+        isDestroyed = true;
+
+        if (droneParticleEffect != null)
+        {
+            StartCoroutine(DroneParticalEffectTimmer());
+        }
+
+        if (electicEffect != null)
+        {
+            electicEffect.SetActive(true);
+        }
+
+        if (destructionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(destructionSound, Camera.main.transform.position);
+        }
+
+        Destroy(gameObject, destroyDelay);
+    }
+
+
+    IEnumerator DroneParticalEffectTimmer()
+    {
+        droneParticleEffect.SetActive(true);
+        yield return new WaitForSeconds(DroneParticalEffectTime);
+        droneParticleEffect.SetActive(false);
     }
 }

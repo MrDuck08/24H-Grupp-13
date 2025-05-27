@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShootManager : MonoBehaviour
 {
-    public float destroyDistance = 100f; // How far the raycast will go
+    [SerializeField] float destroyDistance = 100f; // How far the raycast will go
     private WaveSpawner waveSpawner;
 
     void Start()
@@ -10,7 +10,6 @@ public class ShootManager : MonoBehaviour
        waveSpawner = FindAnyObjectByType<WaveSpawner>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Check if the left mouse button is clicked
@@ -41,10 +40,9 @@ public class ShootManager : MonoBehaviour
             {
                 Debug.Log("Hit an enemy: " + hit.collider.name);
                 // Destroy the hit enemy GameObject
-                Destroy(hit.collider.gameObject);
+                var target = hit.collider.gameObject;
+                target.GetComponent<KamikazeDroneScript>().DroneDestroyed();
                 waveSpawner.EnemyDestroyed();
-
-
             }
             else
             {
