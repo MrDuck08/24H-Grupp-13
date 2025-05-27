@@ -9,6 +9,7 @@ public class DialogeSystem : MonoBehaviour
 
     [SerializeField] List<GameObject> dialogeBundle = new List<GameObject>();
     List<GameObject> dialogueInBundle = new List<GameObject>();
+    [SerializeField] GameObject winDialogeBundle;
 
     [SerializeField] List<GameObject> choiceBundle = new List<GameObject>();
 
@@ -181,7 +182,16 @@ public class DialogeSystem : MonoBehaviour
 
         onWhatDialogueBundle++;
 
-        dialogeBundle[onWhatDialogueBundle].SetActive(true);
+        if (onWhatDialogue < dialogeBundle.Count)
+        {
+            dialogeBundle[onWhatDialogueBundle].SetActive(true);
+        }
+        else
+        {
+
+            winDialogeBundle.SetActive(true);
+
+        }
 
         foreach (Transform child in dialogeBundle[onWhatDialogueBundle].transform)
         {
