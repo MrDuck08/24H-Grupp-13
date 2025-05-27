@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 // New sprites will replace the old as it grows?
 public class KamikazeDroneScript : MonoBehaviour
@@ -20,7 +21,8 @@ public class KamikazeDroneScript : MonoBehaviour
     [Header("Destruction Settings")]
     [SerializeField] float fallSpeed = 5f;
     [SerializeField] float destroyDelay = 15f;
-    [SerializeField] GameObject destructionParticlePrefab;
+    [SerializeField] float DroneParticalEffectTime = 0.3f;
+    [SerializeField] GameObject droneParticleEffect, electicEffect;
     [SerializeField] AudioClip destructionSound;
 
     int horizontalDirection = 0;
@@ -42,6 +44,7 @@ public class KamikazeDroneScript : MonoBehaviour
 
     SpriteRenderer droneSprite;
 
+
     enum MovementAxis { None, Horizontal, Vertical }
     MovementAxis lastChosenAxis = MovementAxis.None;
     int consecutiveHorizontalCount = 0;
@@ -55,6 +58,9 @@ public class KamikazeDroneScript : MonoBehaviour
             Debug.LogError("KamikazeDroneScript requires a SpriteRenderer component on this GameObject!");
             return;
         }
+
+        droneParticleEffect.SetActive(false);
+        electicEffect.SetActive(false);
 
         droneHalfWidth = droneSprite.bounds.extents.x;
         droneHalfHeight = droneSprite.bounds.extents.y;
@@ -75,19 +81,15 @@ public class KamikazeDroneScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) // Temporary test kill switch
-        {
-            DroneDestroyed();
-        }
-        if (isDestroyed)
-        {
-            transform.position += Vector3.down * fallSpeed * Time.deltaTime;
-        }
-        else
+        if (!isDestroyed)
         {
             Movement();
             CheckForDirectionChange();
             HandleScaling();
+        }
+        else
+        {
+            transform.position += Vector3.down * fallSpeed * Time.deltaTime;
         }
     }
 
@@ -229,15 +231,20 @@ public class KamikazeDroneScript : MonoBehaviour
         }
     }
 
-    void DroneDestroyed()
+    public void DroneDestroyed()
     {
         if (isDestroyed) return;
 
         isDestroyed = true;
 
-        if (destructionParticlePrefab != null)
+        if (droneParticleEffect != null)
         {
-            Instantiate(destructionParticlePrefab, transform.position, Quaternion.identity);
+            StartCoroutine(DroneParticalEffectTimmer());
+        }
+
+        if (electicEffect != null)
+        {
+            electicEffect.SetActive(true);
         }
 
         if (destructionSound != null)
@@ -246,5 +253,13 @@ public class KamikazeDroneScript : MonoBehaviour
         }
 
         Destroy(gameObject, destroyDelay);
+    }
+
+
+    IEnumerator DroneParticalEffectTimmer()
+    {
+        droneParticleEffect.SetActive(true);
+        yield return new WaitForSeconds(DroneParticalEffectTime);
+        droneParticleEffect.SetActive(false);
     }
 }

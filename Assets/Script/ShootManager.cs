@@ -40,7 +40,8 @@ public class ShootManager : MonoBehaviour
             {
                 Debug.Log("Hit an enemy: " + hit.collider.name);
                 // Destroy the hit enemy GameObject
-                Destroy(hit.collider.gameObject);
+                var target = hit.collider.gameObject;
+                target.GetComponent<KamikazeDroneScript>().DroneDestroyed();
                 waveSpawner.EnemyDestroyed();
             }
             else
