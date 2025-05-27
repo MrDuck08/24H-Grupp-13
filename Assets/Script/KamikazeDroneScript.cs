@@ -22,8 +22,12 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float fallSpeed = 5f;
     [SerializeField] float destroyDelay = 15f;
     [SerializeField] float DroneParticalEffectTime = 0.3f;
-    [SerializeField] GameObject droneParticleEffect, electicEffect;
-    [SerializeField] AudioClip destructionSound;
+    [SerializeField] GameObject droneParticleEffect, electicEffect, explotionEffect;
+    [SerializeField] AudioClip destructionSound, explotionSound;
+
+    [SerializeField] float deathCanvasDelay = 2f;
+    [SerializeField] float swapSceneDelay = 1.5f;
+    [SerializeField] GameObject deathCanvas;
 
     int horizontalDirection = 0;
     int verticalDirection = 0;
@@ -43,7 +47,7 @@ public class KamikazeDroneScript : MonoBehaviour
     bool isDestroyed = false;
 
     SpriteRenderer droneSprite;
-
+    SceneLoader sceneLoader;
 
     enum MovementAxis { None, Horizontal, Vertical }
     MovementAxis lastChosenAxis = MovementAxis.None;
@@ -61,6 +65,7 @@ public class KamikazeDroneScript : MonoBehaviour
 
         droneParticleEffect.SetActive(false);
         electicEffect.SetActive(false);
+        deathCanvas.SetActive(false);
 
         droneHalfWidth = droneSprite.bounds.extents.x;
         droneHalfHeight = droneSprite.bounds.extents.y;
@@ -77,6 +82,8 @@ public class KamikazeDroneScript : MonoBehaviour
         transform.localScale = new Vector3(startScale, startScale, 1);
 
         //Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
+
+        sceneLoader = FindAnyObjectByType<SceneLoader>();
     }
 
     void Update()
@@ -222,13 +229,29 @@ public class KamikazeDroneScript : MonoBehaviour
 
         transform.localScale = new Vector3(newScale, newScale, 1);
 
-        if (currentScaleTime > 30f)
+        if (startScale >= endScale)
         {
-
-
-            Debug.Log("THE DRONE HAS EXPLODED!!!!!");
-            enabled = false;
+            DroneExplode();
         }
+    }
+
+    void DroneExplode()
+    {
+        Debug.Log("THE DRONE HAS EXPLODED!!!!!");
+        Instantiate(explotionEffect, transform.position, Quaternion.identity);
+        StartCoroutine(PLayerDeath());
+        enabled = false;
+    }
+
+    IEnumerator PLayerDeath()
+    {
+        yield return new WaitForSeconds(deathCanvasDelay);
+
+        deathCanvas.SetActive(true);
+
+        yield return new WaitForSeconds(swapSceneDelay);
+
+        sceneLoader.LoadSceneByIndex(0);
     }
 
     public void DroneDestroyed()
