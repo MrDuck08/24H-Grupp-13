@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             PlaySound(gunShot);
         }
