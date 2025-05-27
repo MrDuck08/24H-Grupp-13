@@ -1,6 +1,5 @@
 using UnityEngine;
-// They will grow and get closer to the player faster as the game progress
-// They will move slighly faster as the game progress but won't move way to fast
+// New sprites will replace the old as it grows?
 public class KamikazeDroneScript : MonoBehaviour
 {
     [Header("Movement settings")]
@@ -12,6 +11,11 @@ public class KamikazeDroneScript : MonoBehaviour
     [Header("Consecutive Direction Limits")]
     [SerializeField] int maxConsecutiveHorizontal = 3;
     [SerializeField] int maxConsecutiveVertical = 3;
+
+    [Header("Scaling Effect")]
+    [SerializeField] float startScale = 0.35f;
+    [SerializeField] float endScale = 2f;
+    [SerializeField] float scaleDuration = 30f;
 
     int horizontalDirection = 0;
     int verticalDirection = 0;
@@ -25,6 +29,8 @@ public class KamikazeDroneScript : MonoBehaviour
 
     float droneHalfWidth;
     float droneHalfHeight;
+
+    float currentScaleTime = 0f;
 
     SpriteRenderer droneSprite;
 
@@ -54,6 +60,8 @@ public class KamikazeDroneScript : MonoBehaviour
         SetNextChangeDirectionTime();
         ChooseRandomDirections();
 
+        transform.localScale = new Vector3(startScale, startScale, 1);
+
         Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
     }
 
@@ -61,6 +69,7 @@ public class KamikazeDroneScript : MonoBehaviour
     {
         Movement();
         CheckForDirectionChange();
+        HandleScaling();
     }
 
     void Movement()
@@ -180,5 +189,24 @@ public class KamikazeDroneScript : MonoBehaviour
         nextChangeDirectionTime = Time.time + randomInterval;
 
         Debug.Log($"Next direction change in: {randomInterval} seconds (at Time.time {nextChangeDirectionTime})");
+    }
+
+    void HandleScaling()
+    {
+        currentScaleTime += Time.deltaTime;
+
+        float t = Mathf.Clamp01(currentScaleTime / scaleDuration);
+
+        float newScale = Mathf.Lerp(startScale, endScale, t);
+
+        transform.localScale = new Vector3(newScale, newScale, 1);
+
+        if (currentScaleTime > 30f)
+        {
+
+
+            Debug.Log("THE DRONE HAS EXPLODED!!!!!");
+            enabled = false;
+        }
     }
 }
