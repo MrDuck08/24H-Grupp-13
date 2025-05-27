@@ -18,6 +18,11 @@ public class DialogeSystem : MonoBehaviour
     bool doingChoice = false;
     bool enableInput = true;
 
+    PatienceBar patienceBar;
+
+    [SerializeField] float correctChoiceAdd;
+    [SerializeField] float wrongChoiceSubtract;
+
     #region Text
 
     TextMeshProUGUI text;
@@ -34,6 +39,8 @@ public class DialogeSystem : MonoBehaviour
 
     private void Start()
     {
+        patienceBar = FindFirstObjectByType<PatienceBar>();
+
         onWhatDialogueBundle = 0;
 
         foreach (Transform child in dialogeBundle[onWhatDialogueBundle].transform)
@@ -84,6 +91,12 @@ public class DialogeSystem : MonoBehaviour
                 return;
             }
 
+            if (onWhatDialogueBundle == 1 && onWhatDialogue == 8)
+            {
+                Debug.Log("Drain");
+                patienceBar.EnableDraining();
+            }
+
             NextDialogue();
 
         }
@@ -126,7 +139,7 @@ public class DialogeSystem : MonoBehaviour
             return;
         }
 
-        // - Patiance
+        patienceBar.SubtractAmount(wrongChoiceSubtract);
 
         if (currentChoiceText != null)
         {
@@ -152,6 +165,8 @@ public class DialogeSystem : MonoBehaviour
         {
             return;
         }
+
+        patienceBar.AddAmount(correctChoiceAdd);
 
         doingChoice = false;
 
