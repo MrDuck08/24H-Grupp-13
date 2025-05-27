@@ -49,8 +49,8 @@ public class PauseAndQuitManager : MonoBehaviour
         Time.timeScale = 1f; // Set time back to normal speed (1 = real-time)
         GameIsPaused = false; // Update pause state
         // Optional: Hide and lock cursor again for gameplay
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
         Debug.Log("Game Resumed.");
     }
 
