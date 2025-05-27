@@ -3,19 +3,12 @@ using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField] AudioSource musicAudioSource;
-
+    [Header("SFX library")]
     public AudioClip gunShot;
-    public AudioClip testMusic;
-
-    //private void Awake()
-    //{
-    //    PlayMusic(testMusic);
-    //}
 
     private void Awake()
     {
-        if (Object.FindObjectsByType<SoundManager>(FindObjectsSortMode.None).Length > 1)
+        if (FindObjectsByType<SoundManager>(FindObjectsSortMode.None).Length > 1)
         {
             gameObject.SetActive(false);
             Destroy(gameObject);
@@ -26,6 +19,11 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PlaySound(gunShot);
+        }
+
         //Checking if any of the AudioSources stopped playing any sound
         //Destroys them if they have
         if (this.gameObject.GetComponent<AudioSource>() != null)
@@ -44,11 +42,5 @@ public class SoundManager : MonoBehaviour
         temporaryAudioSource.playOnAwake = false;
         temporaryAudioSource.clip = clipToPlay;
         temporaryAudioSource.Play();
-    }
-
-    public void PlayMusic(AudioClip musicToPlay)
-    {
-        musicAudioSource.clip = musicToPlay;
-        musicAudioSource.Play();
     }
 }
