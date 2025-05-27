@@ -29,7 +29,7 @@ public class CameraTurn : MonoBehaviour
     {
         Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
 
-        if ((wishPosition - position2D).magnitude < speed * 1.01f)
+        if ((wishPosition - position2D).magnitude < speed * Time.deltaTime * 1.01f)
         {
             transform.position = new Vector3(wishPosition.x, wishPosition.y, zPosition);
         } 
