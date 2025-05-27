@@ -302,7 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   presidentCanvas: {fileID: 1566064366}
   shootingCanvas: {fileID: 965987878}
-  speed: 0.3
+  speed: 3
   zPosition: -10
 --- !u!1 &698946863
 GameObject:
