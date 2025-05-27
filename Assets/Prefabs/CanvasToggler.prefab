@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2311818348164490959}
   - component: {fileID: 4621358147746608059}
   m_Layer: 0
-  m_Name: OptionCanvasToggler
+  m_Name: CanvasToggler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,6 +184,10 @@ PrefabInstance:
     - target: {fileID: 4108184018592881735, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
       propertyPath: m_Name
       value: OptionsCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4108184018592881735, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4393617890635763445, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
       propertyPath: m_AnchorMax.x
