@@ -16,13 +16,19 @@ public class DialogeSystem : MonoBehaviour
     int onWhatDialogue = 0;
 
     bool doingChoice = false;
+    bool enableInput = true;
+
+    PatienceBar patienceBar;
+
+    [SerializeField] float correctChoiceAdd;
+    [SerializeField] float wrongChoiceSubtract;
 
     #region Text
 
     TextMeshProUGUI text;
     string textToWrite;
     int characterIndex;
-    float timePerCharacter = 0.1f;
+    [SerializeField] float timePerCharacter;
     float timer;
 
     bool writeText = false;
@@ -33,6 +39,8 @@ public class DialogeSystem : MonoBehaviour
 
     private void Start()
     {
+        patienceBar = FindFirstObjectByType<PatienceBar>();
+
         onWhatDialogueBundle = 0;
 
         foreach (Transform child in dialogeBundle[onWhatDialogueBundle].transform)
@@ -76,8 +84,18 @@ public class DialogeSystem : MonoBehaviour
 
         }
 
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice && enableInput)
         {
+            if (onWhatDialogueBundle == 1 && onWhatDialogue == 6)
+            {
+                return;
+            }
+
+            if (onWhatDialogueBundle == 1 && onWhatDialogue == 8)
+            {
+                Debug.Log("Drain");
+                patienceBar.EnableDraining();
+            }
 
             NextDialogue();
 
@@ -88,13 +106,9 @@ public class DialogeSystem : MonoBehaviour
     void NextDialogue()
     {
 
-        if (onWhatDialogue >= dialogueInBundle.Count)
+        if (doingChoice == true)
         {
-            doingChoice = true;
-            NextChoice();
-
             return;
-
         }
 
         dialogueInBundle[onWhatDialogue - 1].SetActive(false);
@@ -102,6 +116,13 @@ public class DialogeSystem : MonoBehaviour
         WhatTextToWrite(dialogueInBundle[onWhatDialogue].GetComponentInChildren<TextMeshProUGUI>());
 
         onWhatDialogue++;
+
+        if (onWhatDialogue >= dialogueInBundle.Count)
+        {
+            doingChoice = true;
+            NextChoice();
+
+        }
 
     }
 
@@ -116,8 +137,12 @@ public class DialogeSystem : MonoBehaviour
 
     public void WrongChoice(GameObject WrongText)
     {
+        if (enableInput == false)
+        {
+            return;
+        }
 
-        // - Patiance
+        patienceBar.SubtractAmount(wrongChoiceSubtract);
 
         if (currentChoiceText != null)
         {
@@ -139,6 +164,12 @@ public class DialogeSystem : MonoBehaviour
 
     public void RightChoice()
     {
+        if (enableInput == false)
+        {
+            return;
+        }
+
+        patienceBar.AddAmount(correctChoiceAdd);
 
         doingChoice = false;
 
@@ -167,6 +198,24 @@ public class DialogeSystem : MonoBehaviour
     }
 
     #endregion
+
+    public void skipIfTutorial()
+    {
+        if (onWhatDialogueBundle == 1 && onWhatDialogue == 6)
+        {
+            NextDialogue();
+        }
+    }
+
+    public void EnableInput()
+    {
+        enableInput = true;
+    }
+
+    public void DisableInput()
+    {
+        enableInput = false;
+    }
 
     void WhatTextToWrite(TextMeshProUGUI textToChange)
     {
