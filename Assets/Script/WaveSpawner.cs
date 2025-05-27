@@ -5,12 +5,13 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour
 {
     [Header("Enemy Settings")]
-    public GameObject enemyPrefab; // Drag your enemy prefab here in the Inspector!
-    public float enemySpawnInterval = 1.5f; // Time between spawning individual enemies in a wave
+    [SerializeField] GameObject enemyPrefab; // Drag your enemy prefab here in the Inspector!
+    [SerializeField] float enemySpawnInterval = 1.5f; // Time between spawning individual enemies in a wave
 
     [Header("Wave Settings")]
-    public int enemiesPerWave = 5; // How many enemies per wave
-    public float timeBetweenWaves = 5f; // Time to wait after a wave finishes before the next one starts
+    [SerializeField] int enemiesPerWave = 5; // How many enemies per wave
+    [SerializeField] float timeBetweenWaves = 5f; // Time to wait after a wave finishes before the next one starts
+    [SerializeField] float maxAddTimeToWave = 5f;
 
     // Internal tracking variables
     private Transform[] spawnPoints; // Array to hold all child spawn points
@@ -71,7 +72,8 @@ public class WaveSpawner : MonoBehaviour
         {
             Debug.Log($"Wave {currentWaveNumber} cleared! All {enemiesPerWave} enemies spawned and destroyed.");
             waveInProgress = false; // Mark wave as truly finished (spawned and cleared)
-            StartCoroutine(StartNextWaveAfterDelay());
+            float extraTime = Random.Range(0, 5);
+            StartCoroutine(StartNextWaveAfterDelay(extraTime));
         }
     }
 
@@ -107,10 +109,10 @@ public class WaveSpawner : MonoBehaviour
     }
 
     // Coroutine to handle the delay between waves
-    IEnumerator StartNextWaveAfterDelay()
+    IEnumerator StartNextWaveAfterDelay(float extraTime)
     {
-        Debug.Log($"Waiting for {timeBetweenWaves} seconds before Wave {currentWaveNumber + 1}.");
-        yield return new WaitForSeconds(timeBetweenWaves);
+        Debug.Log($"Waiting for {timeBetweenWaves + extraTime} seconds before Wave {currentWaveNumber + 1}.");
+        yield return new WaitForSeconds(timeBetweenWaves + extraTime);
         StartNextWave();
     }
 

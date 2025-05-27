@@ -76,7 +76,7 @@ public class KamikazeDroneScript : MonoBehaviour
 
         transform.localScale = new Vector3(startScale, startScale, 1);
 
-        Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
+        //Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
     }
 
     void Update()
@@ -190,8 +190,8 @@ public class KamikazeDroneScript : MonoBehaviour
             lastChosenAxis = MovementAxis.Horizontal;
             consecutiveHorizontalCount++;
             consecutiveVerticalCount = 0;
-            Debug.Log($"New Directions: Purely Horizontal = {horizontalDirection}. " +
-                $"Consecutive H: {consecutiveHorizontalCount}/{maxConsecutiveHorizontal}");
+            /*Debug.Log($"New Directions: Purely Horizontal = {horizontalDirection}. " +
+                $"Consecutive H: {consecutiveHorizontalCount}/{maxConsecutiveHorizontal}");*/
         }
         else
         {
@@ -199,8 +199,8 @@ public class KamikazeDroneScript : MonoBehaviour
             lastChosenAxis = MovementAxis.Vertical;
             consecutiveVerticalCount++;
             consecutiveHorizontalCount = 0;
-            Debug.Log($"New Directions: Purely Vertical = {verticalDirection}. " +
-                $"Consecutive V: {consecutiveVerticalCount}/{maxConsecutiveVertical}");
+            /*Debug.Log($"New Directions: Purely Vertical = {verticalDirection}. " +
+                $"Consecutive V: {consecutiveVerticalCount}/{maxConsecutiveVertical}");*/
         }
     }
 
@@ -209,7 +209,7 @@ public class KamikazeDroneScript : MonoBehaviour
         float randomInterval = Random.Range(minChangeDirectionTime, maxChangeDirectionTime);
         nextChangeDirectionTime = Time.time + randomInterval;
 
-        Debug.Log($"Next direction change in: {randomInterval} seconds (at Time.time {nextChangeDirectionTime})");
+        //Debug.Log($"Next direction change in: {randomInterval} seconds (at Time.time {nextChangeDirectionTime})");
     }
 
     void HandleScaling()

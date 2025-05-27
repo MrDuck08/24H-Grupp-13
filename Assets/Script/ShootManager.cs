@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShootManager : MonoBehaviour
 {
-    public float destroyDistance = 100f; // How far the raycast will go
+    [SerializeField] float destroyDistance = 100f; // How far the raycast will go
     private WaveSpawner waveSpawner;
 
     void Start()
