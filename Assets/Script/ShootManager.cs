@@ -10,7 +10,6 @@ public class ShootManager : MonoBehaviour
        waveSpawner = FindAnyObjectByType<WaveSpawner>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Check if the left mouse button is clicked
@@ -43,8 +42,6 @@ public class ShootManager : MonoBehaviour
                 // Destroy the hit enemy GameObject
                 Destroy(hit.collider.gameObject);
                 waveSpawner.EnemyDestroyed();
-
-
             }
             else
             {
