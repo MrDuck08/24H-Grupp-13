@@ -106,13 +106,9 @@ public class DialogeSystem : MonoBehaviour
     void NextDialogue()
     {
 
-        if (onWhatDialogue >= dialogueInBundle.Count)
+        if (doingChoice == true)
         {
-            doingChoice = true;
-            NextChoice();
-
             return;
-
         }
 
         dialogueInBundle[onWhatDialogue - 1].SetActive(false);
@@ -120,6 +116,13 @@ public class DialogeSystem : MonoBehaviour
         WhatTextToWrite(dialogueInBundle[onWhatDialogue].GetComponentInChildren<TextMeshProUGUI>());
 
         onWhatDialogue++;
+
+        if (onWhatDialogue >= dialogueInBundle.Count)
+        {
+            doingChoice = true;
+            NextChoice();
+
+        }
 
     }
 
