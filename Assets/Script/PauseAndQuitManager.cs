@@ -3,10 +3,10 @@ using UnityEngine;
 public class PauseAndQuitManager : MonoBehaviour
 {
     // A static boolean to easily check pause state from other scripts
-    public static bool GameIsPaused = false;
+    [SerializeField] static bool GameIsPaused = false;
 
     // Reference to your Pause Menu UI Panel
-    public GameObject pauseMenuUI;
+    [SerializeField] GameObject pauseMenuUI;
 
     void Start()
     {
