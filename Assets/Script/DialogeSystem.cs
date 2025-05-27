@@ -16,13 +16,14 @@ public class DialogeSystem : MonoBehaviour
     int onWhatDialogue = 0;
 
     bool doingChoice = false;
+    bool enableInput = true;
 
     #region Text
 
     TextMeshProUGUI text;
     string textToWrite;
     int characterIndex;
-    float timePerCharacter = 0.1f;
+    [SerializeField] float timePerCharacter;
     float timer;
 
     bool writeText = false;
@@ -76,8 +77,12 @@ public class DialogeSystem : MonoBehaviour
 
         }
 
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice && enableInput)
         {
+            if (onWhatDialogueBundle == 1 && onWhatDialogue == 6)
+            {
+                return;
+            }
 
             NextDialogue();
 
@@ -116,6 +121,10 @@ public class DialogeSystem : MonoBehaviour
 
     public void WrongChoice(GameObject WrongText)
     {
+        if (enableInput == false)
+        {
+            return;
+        }
 
         // - Patiance
 
@@ -139,6 +148,10 @@ public class DialogeSystem : MonoBehaviour
 
     public void RightChoice()
     {
+        if (enableInput == false)
+        {
+            return;
+        }
 
         doingChoice = false;
 
@@ -167,6 +180,24 @@ public class DialogeSystem : MonoBehaviour
     }
 
     #endregion
+
+    public void skipIfTutorial()
+    {
+        if (onWhatDialogueBundle == 1 && onWhatDialogue == 6)
+        {
+            NextDialogue();
+        }
+    }
+
+    public void EnableInput()
+    {
+        enableInput = true;
+    }
+
+    public void DisableInput()
+    {
+        enableInput = false;
+    }
 
     void WhatTextToWrite(TextMeshProUGUI textToChange)
     {

@@ -17,12 +17,17 @@ public class CameraTurn : MonoBehaviour
     float zPosition;
 
     Vector2 wishPosition;
+    bool presidentLook = true;
+
+    DialogeSystem dialogeSystem;
 
     private void Start()
     {
         // Set camera start position
         transform.position = presidentCanvas.transform.position;
         wishPosition = transform.position;
+
+        dialogeSystem = FindFirstObjectByType<DialogeSystem>();
     }
 
     private void Update()
@@ -40,18 +45,22 @@ public class CameraTurn : MonoBehaviour
             transform.position = new Vector3(updatedposition2D.x, updatedposition2D.y, zPosition);
         }
 
-        // Debug
         if (Input.GetKeyDown(KeyCode.F))
         {
-            onShootingShift();
-        }
+            presidentLook = !presidentLook;
 
-        // Debug
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            onPresidentShift();
+            if (presidentLook == false)
+            {
+                dialogeSystem.DisableInput();
+                onShootingShift();
+            }
+            else
+            {
+                dialogeSystem.EnableInput();
+                onPresidentShift();
+                dialogeSystem.skipIfTutorial();
+            }
         }
-
 
     }
 
