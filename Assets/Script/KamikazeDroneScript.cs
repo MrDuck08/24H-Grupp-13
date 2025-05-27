@@ -17,6 +17,12 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float endScale = 2f;
     [SerializeField] float scaleDuration = 30f;
 
+    [Header("Destruction Settings")]
+    [SerializeField] float fallSpeed = 5f;
+    [SerializeField] float destroyDelay = 15f;
+    [SerializeField] GameObject destructionParticlePrefab;
+    [SerializeField] AudioClip destructionSound;
+
     int horizontalDirection = 0;
     int verticalDirection = 0;
 
@@ -31,6 +37,8 @@ public class KamikazeDroneScript : MonoBehaviour
     float droneHalfHeight;
 
     float currentScaleTime = 0f;
+
+    bool isDestroyed = false;
 
     SpriteRenderer droneSprite;
 
@@ -67,9 +75,20 @@ public class KamikazeDroneScript : MonoBehaviour
 
     void Update()
     {
-        Movement();
-        CheckForDirectionChange();
-        HandleScaling();
+        if (Input.GetKeyDown(KeyCode.K)) // Temporary test kill switch
+        {
+            DroneDestroyed();
+        }
+        if (isDestroyed)
+        {
+            transform.position += Vector3.down * fallSpeed * Time.deltaTime;
+        }
+        else
+        {
+            Movement();
+            CheckForDirectionChange();
+            HandleScaling();
+        }
     }
 
     void Movement()
@@ -208,5 +227,24 @@ public class KamikazeDroneScript : MonoBehaviour
             Debug.Log("THE DRONE HAS EXPLODED!!!!!");
             enabled = false;
         }
+    }
+
+    void DroneDestroyed()
+    {
+        if (isDestroyed) return;
+
+        isDestroyed = true;
+
+        if (destructionParticlePrefab != null)
+        {
+            Instantiate(destructionParticlePrefab, transform.position, Quaternion.identity);
+        }
+
+        if (destructionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(destructionSound, Camera.main.transform.position);
+        }
+
+        Destroy(gameObject, destroyDelay);
     }
 }

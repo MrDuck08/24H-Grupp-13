@@ -261,6 +261,10 @@ MonoBehaviour:
   startScale: 0.35
   endScale: 1.5
   scaleDuration: 30
+  fallSpeed: 5
+  destroyDelay: 7
+  destructionParticlePrefab: {fileID: 0}
+  destructionSound: {fileID: 0}
 --- !u!61 &1249446826
 BoxCollider2D:
   m_ObjectHideFlags: 0
