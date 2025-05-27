@@ -17,13 +17,17 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float startScale = 0.35f;
     [SerializeField] float endScale = 2f;
     [SerializeField] float scaleDuration = 30f;
+    [SerializeField] float warningTime = 3f;
 
     [Header("Destruction Settings")]
     [SerializeField] float fallSpeed = 5f;
     [SerializeField] float destroyDelay = 15f;
     [SerializeField] float DroneParticalEffectTime = 0.3f;
-    [SerializeField] GameObject droneParticleEffect, electicEffect;
-    [SerializeField] AudioClip destructionSound;
+    [SerializeField] GameObject droneParticleEffect, electicEffect, explotionEffect;
+    [SerializeField] AudioClip destructionSound, explotionSound;
+
+    [SerializeField] float blinkTime = 0.2f;
+    [SerializeField] float deathCanvasDelay = 2f;
 
     int horizontalDirection = 0;
     int verticalDirection = 0;
@@ -41,9 +45,12 @@ public class KamikazeDroneScript : MonoBehaviour
     float currentScaleTime = 0f;
 
     bool isDestroyed = false;
+    bool isGoingToExplode = false;
+    bool isBlinking = false;
 
     SpriteRenderer droneSprite;
-
+    SceneLoader sceneLoader;
+    DeathCanvasManager deathCanvasManager;
 
     enum MovementAxis { None, Horizontal, Vertical }
     MovementAxis lastChosenAxis = MovementAxis.None;
@@ -58,6 +65,8 @@ public class KamikazeDroneScript : MonoBehaviour
             Debug.LogError("KamikazeDroneScript requires a SpriteRenderer component on this GameObject!");
             return;
         }
+
+        deathCanvasManager = FindAnyObjectByType<DeathCanvasManager>();
 
         droneParticleEffect.SetActive(false);
         electicEffect.SetActive(false);
@@ -77,6 +86,8 @@ public class KamikazeDroneScript : MonoBehaviour
         transform.localScale = new Vector3(startScale, startScale, 1);
 
         //Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
+
+        sceneLoader = FindAnyObjectByType<SceneLoader>();
     }
 
     void Update()
@@ -155,12 +166,12 @@ public class KamikazeDroneScript : MonoBehaviour
         if (lastChosenAxis == MovementAxis.Horizontal && consecutiveHorizontalCount >= maxConsecutiveHorizontal)
         {
             canChooseHorizontal = false;
-            Debug.Log("Horizontal limit reached. Forcing Vertcial.");
+            //Debug.Log("Horizontal limit reached. Forcing Vertcial.");
         }
         else if (lastChosenAxis == MovementAxis.Vertical && consecutiveVerticalCount >= maxConsecutiveVertical)
         {
             canChooseVertical = false;
-            Debug.Log("Vertical limit reached. Forcing Horizontal.");
+            //Debug.Log("Vertical limit reached. Forcing Horizontal.");
         }
 
         MovementAxis chosenAxis;
@@ -222,13 +233,47 @@ public class KamikazeDroneScript : MonoBehaviour
 
         transform.localScale = new Vector3(newScale, newScale, 1);
 
-        if (currentScaleTime > 30f)
+        if (newScale >= endScale)
         {
+            warningTime -= Time.deltaTime;
 
+            if (!isBlinking)
+            {
+                isBlinking = true;
 
-            Debug.Log("THE DRONE HAS EXPLODED!!!!!");
-            enabled = false;
+                StartCoroutine(BlinkingSprite());
+            }
+
+            if (warningTime <= 0 && !isGoingToExplode)
+            {
+                isGoingToExplode = true;
+                StartCoroutine(DroneExplode());
+            }
         }
+    }
+
+    IEnumerator BlinkingSprite()
+    {
+        while (!isGoingToExplode)
+        {
+            droneSprite.color = Color.red;
+
+            yield return new WaitForSeconds(blinkTime);
+
+            droneSprite.color = Color.white;
+
+            yield return new WaitForSeconds(blinkTime);
+        }
+    }
+    IEnumerator DroneExplode()
+    {
+        Debug.Log("THE DRONE HAS EXPLODED!!!!!");
+        Instantiate(explotionEffect, transform.position, Quaternion.identity);
+
+        yield return new WaitForSeconds(deathCanvasDelay);
+
+        deathCanvasManager.ControllCanvasOfAndOn(true);
+        Time.timeScale = 0;
     }
 
     public void DroneDestroyed()
