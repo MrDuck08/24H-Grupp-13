@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
+    [SerializeField] AudioSource musicAudioSource;
+
     public AudioClip gunShot;
     public AudioClip testMusic;
 
@@ -10,9 +13,21 @@ public class SoundManager : MonoBehaviour
     //    PlayMusic(testMusic);
     //}
 
+    private void Awake()
+    {
+        if (Object.FindObjectsByType<SoundManager>(FindObjectsSortMode.None).Length > 1)
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(this);
+    }
+
     void Update()
     {
         //Checking if any of the AudioSources stopped playing any sound
+        //Destroys them if they have
         if (this.gameObject.GetComponent<AudioSource>() != null)
         {
             AudioSource temporaryAudioSource = this.gameObject.GetComponent<AudioSource>();
@@ -31,12 +46,9 @@ public class SoundManager : MonoBehaviour
         temporaryAudioSource.Play();
     }
 
-    void PlayMusic(AudioClip musicToPlay)
+    public void PlayMusic(AudioClip musicToPlay)
     {
-        AudioSource musicPlayerAudioSource = this.gameObject.AddComponent<AudioSource>();
-        musicPlayerAudioSource.playOnAwake = false;
-        musicPlayerAudioSource.loop = true;
-        musicPlayerAudioSource.clip = testMusic;
-        musicPlayerAudioSource.Play();
+        musicAudioSource.clip = musicToPlay;
+        musicAudioSource.Play();
     }
 }
