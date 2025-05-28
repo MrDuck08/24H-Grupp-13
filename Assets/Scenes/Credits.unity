@@ -497,6 +497,30 @@ PrefabInstance:
       value: CreditsCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 6757677888481724661, guid: 9f210202546919d4dad895568f7e0f98, type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0.5411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757677888481724661, guid: 9f210202546919d4dad895568f7e0f98, type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.5411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757677888481724661, guid: 9f210202546919d4dad895568f7e0f98, type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 0.5411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757677888481724661, guid: 9f210202546919d4dad895568f7e0f98, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0.72156864
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757677888481724661, guid: 9f210202546919d4dad895568f7e0f98, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.72156864
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757677888481724661, guid: 9f210202546919d4dad895568f7e0f98, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0.72156864
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757677888481724661, guid: 9f210202546919d4dad895568f7e0f98, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 395062549}
