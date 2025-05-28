@@ -45,12 +45,17 @@ public class DialogeSystem : MonoBehaviour
 
     [Header("Jump")]
 
+    [SerializeField] GameObject president;
     [SerializeField] GameObject jumpPos;
 
     [SerializeField] float jumpSpeed = 5;
+    [SerializeField] float downAcceration = 5;
 
     float timeForJumpUp;
+    float originalJumpPos;
     float jumpAcceration = 1f;
+    float distanseToJump;
+    float xHalfWayPos;
 
     bool startJumpUp = false;
     bool startJumpingDown = false;
@@ -58,8 +63,11 @@ public class DialogeSystem : MonoBehaviour
 
     #endregion
 
+    SceneLoader sceneLoader;
+
     private void Start()
     {
+        sceneLoader = FindObjectOfType<SceneLoader>();
         patienceBar = FindFirstObjectByType<PatienceBar>();
 
         onWhatDialogueBundle = 0;
@@ -76,6 +84,8 @@ public class DialogeSystem : MonoBehaviour
         WhatTextToWrite(dialogueInBundle[onWhatDialogue].GetComponentInChildren<TextMeshProUGUI>());
 
         onWhatDialogue++;
+
+        originalJumpPos = timeForJumpUp;
 
     }
 
@@ -116,6 +126,59 @@ public class DialogeSystem : MonoBehaviour
 
         }
 
+        #region Jump
+
+        if (startJumpUp)
+        {
+
+            timeForJumpUp -= Time.deltaTime;
+
+            jumpSpeed += jumpAcceration * Time.deltaTime;
+
+            president.transform.position = Vector2.MoveTowards(president.transform.position, new Vector2(jumpPos.transform.position.x - xHalfWayPos, xHalfWayPos * 2), jumpSpeed * Time.deltaTime);
+
+            if(timeForJumpUp <= 0)
+            {
+
+                startJumpUp = false;
+                startJumpingDown = true;
+
+                distanseToJump = Vector2.Distance(jumpPos.transform.position, president.transform.position);
+
+                timeForJumpUp = originalJumpPos;
+
+                timeForJumpUp = distanseToJump * 2 / jumpSpeed;
+
+                jumpAcceration = downAcceration;
+
+                jumpSpeed = 0;
+
+            }
+
+        }
+
+        if (startJumpingDown)
+        {
+
+            timeForJumpUp -= Time.deltaTime;
+
+            jumpSpeed += jumpAcceration * Time.deltaTime;
+
+            president.transform.position = Vector2.MoveTowards(president.transform.position, jumpPos.transform.position, jumpSpeed * Time.deltaTime);
+
+            if (president.transform.position == jumpPos.transform.position)
+            {
+
+                startJumpingDown = false;
+
+                sceneLoader.LoadSceneByName("LoseScene");
+
+            }
+
+        }
+
+        #endregion
+
     }
 
     void NextDialogue()
@@ -153,13 +216,18 @@ public class DialogeSystem : MonoBehaviour
         if (loseDueToPatiance)
         {
 
-            Debug.Log("LOSE");
+            xHalfWayPos = jumpPos.transform.position.x - president.transform.position.x;
 
-            float distanseToJumpPos = Vector2.Distance(new Vector2(jumpPos.transform.position.x/2, jumpPos.transform.position.x), transform.position);
+            xHalfWayPos /= 2;
 
-            timeForJumpUp = distanseToJumpPos * 2 / jumpSpeed;
+            distanseToJump = Vector2.Distance(new Vector2(jumpPos.transform.position.x - xHalfWayPos, xHalfWayPos * 2), president.transform.position);
+
+            timeForJumpUp = distanseToJump * 2 / jumpSpeed;
 
             jumpAcceration = -jumpSpeed / timeForJumpUp;
+
+            jumping = true;
+            startJumpUp = true;
 
             return;
 
@@ -174,7 +242,7 @@ public class DialogeSystem : MonoBehaviour
         else
         {
 
-            Debug.Log("WIN");
+            sceneLoader.LoadSceneByName("WinScene");
 
         }
 
@@ -248,6 +316,8 @@ public class DialogeSystem : MonoBehaviour
 
             winDialogeBundle.SetActive(true);
 
+            patienceBar.DisableDraining();
+
             foreach (Transform child in winDialogeBundle.transform)
             {
 
@@ -288,8 +358,6 @@ public class DialogeSystem : MonoBehaviour
     {
 
         if(loseDueToPatiance) { return ; }
-
-        Debug.Log("LOSE 2");
 
         loseDueToPatiance = true;
 

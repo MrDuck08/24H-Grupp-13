@@ -86,6 +86,6 @@ public class PatienceBar : MonoBehaviour
 
     public void DisableDraining()
     {
-        isDraining = true;
+        isDraining = false;
     }
 }

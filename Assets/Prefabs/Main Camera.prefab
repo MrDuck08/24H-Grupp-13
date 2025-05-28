@@ -92,6 +92,7 @@ MonoBehaviour:
   bar: {fileID: 6292763699543489162}
   startSpeed: 0.03
   acceleration: 0.000003
+  speed: 2.5
 --- !u!1 &4699216928948077133
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +228,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &1782987340055341297
 MonoBehaviour:
@@ -377,5 +378,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   presidentCanvas: {fileID: 0}
   shootingCanvas: {fileID: 0}
-  speed: 50
+  speed: 85
   zPosition: -10
