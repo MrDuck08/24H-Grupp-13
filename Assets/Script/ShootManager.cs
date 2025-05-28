@@ -3,11 +3,14 @@ using UnityEngine;
 public class ShootManager : MonoBehaviour
 {
     [SerializeField] float destroyDistance = 100f; // How far the raycast will go
+
     private WaveSpawner waveSpawner;
+    private SoundManager soundManager;
 
     void Start()
     {
        waveSpawner = FindAnyObjectByType<WaveSpawner>();
+        soundManager = FindAnyObjectByType<SoundManager>();
     }
 
     void Update()
@@ -21,6 +24,8 @@ public class ShootManager : MonoBehaviour
 
     void Shoot()
     {
+        soundManager.PlaySound(soundManager.gunShotSound);
+
         // Get the mouse position in screen coordinates
         Vector2 mousePosition = Input.mousePosition;
 
@@ -38,6 +43,7 @@ public class ShootManager : MonoBehaviour
             // Check if the hit object has the "Enemy" tag
             if (hit.collider.CompareTag("Enemy"))
             {
+                soundManager.PlaySound(soundManager.hitEnemySound);
                 Debug.Log("Hit an enemy: " + hit.collider.name);
                 // Destroy the hit enemy GameObject
                 var target = hit.collider.gameObject;
@@ -51,6 +57,7 @@ public class ShootManager : MonoBehaviour
         }
         else
         {
+            soundManager.PlaySound(soundManager.hitSomthingElseSound);
             Debug.Log("Did not hit anything.");
         }
     }
