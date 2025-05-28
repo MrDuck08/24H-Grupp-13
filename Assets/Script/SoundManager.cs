@@ -9,6 +9,10 @@ public class SoundManager : MonoBehaviour
     public AudioClip hitWoodSound;
     public AudioClip hitSofaSound;
     public AudioClip turnSound;
+    public AudioClip droneDestructionSound;
+    public AudioClip explosionSound;
+    public AudioClip countdownSound;
+
 
     private void Awake()
     {

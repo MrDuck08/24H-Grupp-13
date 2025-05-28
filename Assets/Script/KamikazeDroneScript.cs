@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-// New sprites will replace the old as it grows?
+
 public class KamikazeDroneScript : MonoBehaviour
 {
     [Header("Movement settings")]
@@ -8,6 +8,8 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float verticalMoveSpeed = 3f;
     [SerializeField] float minChangeDirectionTime = 1f;
     [SerializeField] float maxChangeDirectionTime = 4f;
+    [SerializeField] AudioSource droneMovingAudioSource;
+    [SerializeField] AudioClip movingDroneSound;
 
     [Header("Consecutive Direction Limits")]
     [SerializeField] int maxConsecutiveHorizontal = 3;
@@ -24,10 +26,13 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float destroyDelay = 15f;
     [SerializeField] float DroneParticalEffectTime = 0.3f;
     [SerializeField] GameObject droneParticleEffect, electicEffect, explotionEffect;
-    [SerializeField] AudioClip destructionSound, explotionSound;
-
     [SerializeField] float blinkTime = 0.2f;
     [SerializeField] float deathCanvasDelay = 2f;
+
+    [Header("Animation Settings")]
+    [SerializeField] Sprite droneSpriteFrame1;
+    [SerializeField] Sprite droneSpriteFrame2;
+    [SerializeField] float animationFrameDelay = 0.15f;
 
     int horizontalDirection = 0;
     int verticalDirection = 0;
@@ -47,9 +52,11 @@ public class KamikazeDroneScript : MonoBehaviour
     bool isDestroyed = false;
     bool isGoingToExplode = false;
     bool isBlinking = false;
+    bool isAnimating = true;
 
     SpriteRenderer droneSprite;
-    SceneLoader sceneLoader;
+
+    SoundManager soundManager;
     DeathCanvasManager deathCanvasManager;
 
     enum MovementAxis { None, Horizontal, Vertical }
@@ -59,11 +66,30 @@ public class KamikazeDroneScript : MonoBehaviour
 
     void Start()
     {
+        soundManager = FindAnyObjectByType<SoundManager>();
+
+        droneMovingAudioSource = GetComponent<AudioSource>();
+
+        if (droneMovingAudioSource != null && movingDroneSound != null)
+        {
+            droneMovingAudioSource.clip = movingDroneSound;
+            droneMovingAudioSource.loop = true;
+        }
+
         droneSprite = GetComponentInChildren<SpriteRenderer>();
         if (droneSprite == null)
         {
-            Debug.LogError("KamikazeDroneScript requires a SpriteRenderer component on this GameObject!");
+            Debug.LogWarning("KamikazeDroneScript requires a SpriteRenderer component on this GameObject!");
             return;
+        }
+
+        if (droneSpriteFrame1 != null && droneSpriteFrame2 != null)
+        {
+            StartCoroutine(AnimateDroneSprite());
+        }
+        else
+        {
+            Debug.LogWarning("Drone animation sprites not assigned. Animation will not play.");
         }
 
         deathCanvasManager = FindAnyObjectByType<DeathCanvasManager>();
@@ -86,8 +112,6 @@ public class KamikazeDroneScript : MonoBehaviour
         transform.localScale = new Vector3(startScale, startScale, 1);
 
         //Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
-
-        sceneLoader = FindAnyObjectByType<SceneLoader>();
     }
 
     void Update()
@@ -97,10 +121,20 @@ public class KamikazeDroneScript : MonoBehaviour
             Movement();
             CheckForDirectionChange();
             HandleScaling();
+
+            if (droneMovingAudioSource != null && !droneMovingAudioSource.isPlaying)
+            {
+                droneMovingAudioSource.Play();
+            }
         }
         else
         {
             transform.position += Vector3.down * fallSpeed * Time.deltaTime;
+
+            if (droneMovingAudioSource != null && droneMovingAudioSource.isPlaying)
+            {
+                droneMovingAudioSource.Stop();
+            }
         }
     }
 
@@ -240,8 +274,8 @@ public class KamikazeDroneScript : MonoBehaviour
             if (!isBlinking)
             {
                 isBlinking = true;
-
-                StartCoroutine(BlinkingSprite());
+                soundManager.PlaySound(soundManager.countdownSound);
+                StartCoroutine(BlinkingCountdown());
             }
 
             if (warningTime <= 0 && !isGoingToExplode)
@@ -252,7 +286,7 @@ public class KamikazeDroneScript : MonoBehaviour
         }
     }
 
-    IEnumerator BlinkingSprite()
+    IEnumerator BlinkingCountdown()
     {
         while (!isGoingToExplode)
         {
@@ -268,6 +302,11 @@ public class KamikazeDroneScript : MonoBehaviour
     IEnumerator DroneExplode()
     {
         Debug.Log("THE DRONE HAS EXPLODED!!!!!");
+
+        isDestroyed = true;
+
+        soundManager.PlaySound(soundManager.explosionSound);
+
         Instantiate(explotionEffect, transform.position, Quaternion.identity);
 
         yield return new WaitForSeconds(deathCanvasDelay);
@@ -282,6 +321,9 @@ public class KamikazeDroneScript : MonoBehaviour
 
         isDestroyed = true;
 
+        isAnimating = false;
+        StopCoroutine(AnimateDroneSprite());
+
         if (droneParticleEffect != null)
         {
             StartCoroutine(DroneParticalEffectTimmer());
@@ -292,19 +334,35 @@ public class KamikazeDroneScript : MonoBehaviour
             electicEffect.SetActive(true);
         }
 
-        if (destructionSound != null)
-        {
-            AudioSource.PlayClipAtPoint(destructionSound, Camera.main.transform.position);
-        }
+        soundManager.PlaySound(soundManager.droneDestructionSound);
 
         Destroy(gameObject, destroyDelay);
     }
-
 
     IEnumerator DroneParticalEffectTimmer()
     {
         droneParticleEffect.SetActive(true);
         yield return new WaitForSeconds(DroneParticalEffectTime);
         droneParticleEffect.SetActive(false);
+    }
+
+    IEnumerator AnimateDroneSprite()
+    {
+        while (isAnimating)
+        {
+            if (droneSprite != null && droneSpriteFrame1 != null)
+            {
+                droneSprite.sprite = droneSpriteFrame1;
+            }
+
+            yield return new WaitForSeconds(animationFrameDelay);
+
+            if (droneSprite != null && droneSpriteFrame2 != null)
+            {
+                droneSprite.sprite = droneSpriteFrame2;
+            }
+
+            yield return new WaitForSeconds(animationFrameDelay);
+        }
     }
 }
