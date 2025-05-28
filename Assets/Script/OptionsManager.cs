@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class OptionsManager : MonoBehaviour
 {
-    [Header("Music")]
-    [SerializeField] UnityEngine.UI.Scrollbar musicVolumeSlider;
-    [SerializeField] float musicVolumeMax;
+    UnityEngine.UI.Scrollbar musicVolumeSlider;
+    float musicVolumeMax = 1;
 
-    [Header("SFX")]
-    [SerializeField] UnityEngine.UI.Scrollbar SFXVolumeSlider;
-    [SerializeField] float SFXVolumeMax;
+    UnityEngine.UI.Scrollbar SFXVolumeSlider;
+    float SFXVolumeMax = 1;
 
     AudioSource musicAudioSource;
     AudioSource[] SFXAudioSources;
     float musicVolume;
     float SFXVolume;
+    bool foundMusicVolumeSlider = false;
+    bool foundSFXVolumeSlider = false;
 
     private void Awake()
     {
@@ -31,19 +31,29 @@ public class OptionsManager : MonoBehaviour
     void Update()
     {   
         //Music
-        MusicPlayer musicPlayer = GetComponent<MusicPlayer>();
+        MusicPlayer musicPlayer = FindFirstObjectByType<MusicPlayer>();
         if (musicPlayer != null)
         {
             musicAudioSource = musicPlayer.GetComponent<AudioSource>();
         }
-
+        if (GameObject.Find("MusicVolumeSlider") != null)
+        {
+            musicVolumeSlider = GameObject.Find("MusicVolumeSlider").GetComponent<UnityEngine.UI.Scrollbar>();
+        }
+        
         if (musicVolumeSlider != null)
         {
             musicVolume = musicVolumeSlider.value * musicVolumeMax;
         }
-        if (musicAudioSource != null)
+        
+        if (musicAudioSource != null && musicVolumeSlider != null)
         {
             musicAudioSource.volume = musicVolume;
+            foundMusicVolumeSlider = true;
+        }
+        if (musicAudioSource != null && musicVolumeSlider == null && foundMusicVolumeSlider == false)
+        {
+            musicAudioSource.volume = musicVolumeMax / 2;
         }
 
         //SFX
@@ -52,14 +62,32 @@ public class OptionsManager : MonoBehaviour
         {
             SFXAudioSources = soundManager.GetComponents<AudioSource>();
         }
-
+        if (GameObject.Find("SFXVolumeSlider") != null)
+        {
+            SFXVolumeSlider = GameObject.Find("SFXVolumeSlider").GetComponent<UnityEngine.UI.Scrollbar>();
+        }
+        
         if (SFXVolumeSlider != null)
         {
             SFXVolume = SFXVolumeSlider.value * SFXVolumeMax;
         }
+        
         foreach (AudioSource SFXAudioSource in SFXAudioSources)
         {
-            SFXAudioSource.volume = SFXVolume;
+            
+            if (SFXAudioSource != null && SFXVolumeSlider == null && foundSFXVolumeSlider == true)
+            {
+                SFXAudioSource.volume = SFXVolume;
+            }
+            else if (SFXAudioSource != null && SFXVolumeSlider == null && foundSFXVolumeSlider == false)
+            {
+                SFXAudioSource.volume = SFXVolumeMax / 2;
+            }
+            else if (SFXAudioSource != null && SFXVolumeSlider != null)
+            {
+                SFXAudioSource.volume = SFXVolume;
+                foundSFXVolumeSlider = true;
+            } 
         }
     }
 }
