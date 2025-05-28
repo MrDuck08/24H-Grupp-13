@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-// New sprites will replace the old as it grows?
+
 public class KamikazeDroneScript : MonoBehaviour
 {
     [Header("Movement settings")]
@@ -25,9 +25,13 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float DroneParticalEffectTime = 0.3f;
     [SerializeField] GameObject droneParticleEffect, electicEffect, explotionEffect;
     [SerializeField] AudioClip destructionSound, explotionSound;
-
     [SerializeField] float blinkTime = 0.2f;
     [SerializeField] float deathCanvasDelay = 2f;
+
+    [Header("Animation Settings")]
+    [SerializeField] Sprite droneSpriteFrame1;
+    [SerializeField] Sprite droneSpriteFrame2;
+    [SerializeField] float animationFrameDelay = 0.15f;
 
     int horizontalDirection = 0;
     int verticalDirection = 0;
@@ -47,6 +51,7 @@ public class KamikazeDroneScript : MonoBehaviour
     bool isDestroyed = false;
     bool isGoingToExplode = false;
     bool isBlinking = false;
+    bool isAnimating = true;
 
     SpriteRenderer droneSprite;
     SceneLoader sceneLoader;
@@ -66,7 +71,16 @@ public class KamikazeDroneScript : MonoBehaviour
             return;
         }
 
-        deathCanvasManager = FindAnyObjectByType<DeathCanvasManager>();
+        if (droneSpriteFrame1 != null && droneSpriteFrame2 != null)
+        {
+            StartCoroutine(AnimateDroneSprite());
+        }
+        else
+        {
+            Debug.LogWarning("Drone animation sprites not assigned. Animation will not play.");
+        }
+
+            deathCanvasManager = FindAnyObjectByType<DeathCanvasManager>();
 
         droneParticleEffect.SetActive(false);
         electicEffect.SetActive(false);
@@ -282,6 +296,9 @@ public class KamikazeDroneScript : MonoBehaviour
 
         isDestroyed = true;
 
+        isAnimating = false;
+        StopCoroutine(AnimateDroneSprite());
+
         if (droneParticleEffect != null)
         {
             StartCoroutine(DroneParticalEffectTimmer());
@@ -300,11 +317,30 @@ public class KamikazeDroneScript : MonoBehaviour
         Destroy(gameObject, destroyDelay);
     }
 
-
     IEnumerator DroneParticalEffectTimmer()
     {
         droneParticleEffect.SetActive(true);
         yield return new WaitForSeconds(DroneParticalEffectTime);
         droneParticleEffect.SetActive(false);
+    }
+
+    IEnumerator AnimateDroneSprite()
+    {
+        while (isAnimating)
+        {
+            if (droneSprite != null && droneSpriteFrame1 != null)
+            {
+                droneSprite.sprite = droneSpriteFrame1;
+            }
+
+            yield return new WaitForSeconds(animationFrameDelay);
+
+            if (droneSprite != null && droneSpriteFrame2 != null)
+            {
+                droneSprite.sprite = droneSpriteFrame2;
+            }
+
+            yield return new WaitForSeconds(animationFrameDelay);
+        }
     }
 }
