@@ -50,6 +50,10 @@ public class ShootManager : MonoBehaviour
                 target.GetComponent<KamikazeDroneScript>().DroneDestroyed();
                 waveSpawner.EnemyDestroyed();
             }
+            else if(hit.collider.CompareTag("Wood"))
+            {
+                Debug.Log("Hit wood: " + hit.collider.name);
+            }
             else
             {
                 Debug.Log("Hit something else: " + hit.collider.name);
