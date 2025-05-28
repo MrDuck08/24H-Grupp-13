@@ -54,7 +54,6 @@ public class PauseAndQuitManager : MonoBehaviour
         // Optional: Hide and lock cursor again for gameplay
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
-        Debug.Log("Game Resumed.");
     }
 
     // Call this method when Esc is pressed during gameplay
@@ -69,7 +68,6 @@ public class PauseAndQuitManager : MonoBehaviour
         // Optional: Make cursor visible and unlocked when paused
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        Debug.Log("Game Paused.");
     }
 
     // Call this method when the Quit button is clicked

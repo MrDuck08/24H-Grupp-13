@@ -14,8 +14,10 @@ public class PatienceBar : MonoBehaviour
     float acceleration;
 
     float patience;
-    float speed;
+    [SerializeField] float speed;
     bool isDraining;
+
+    DialogeSystem DialogeSystem;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,12 +25,26 @@ public class PatienceBar : MonoBehaviour
         isDraining = false;
         patience = 1.0f;
         speed = startSpeed;
+
+        DialogeSystem = FindObjectOfType<DialogeSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // Patience
+        if(patience <= 0)
+        {
+
+            DialogeSystem.Lose();
+
+            bar.transform.localScale = new Vector3(patience, 1, 1);
+            bar.color = new Color(1.0f - patience, patience, 0);
+
+            return;
+
+        }
+
         if (isDraining == true)
         {
             patience -= speed * Time.deltaTime;
@@ -59,7 +75,7 @@ public class PatienceBar : MonoBehaviour
     /// <param name="newValue">the value to subtract</param>
     public void SubtractAmount(float newValue)
     {
-        patience += newValue;
+        patience -= newValue;
         patience = math.clamp(patience, 0.0f, 1.0f);
     }
 

@@ -10,6 +10,7 @@ public class DialogeSystem : MonoBehaviour
     [SerializeField] List<GameObject> dialogeBundle = new List<GameObject>();
     List<GameObject> dialogueInBundle = new List<GameObject>();
     [SerializeField] GameObject winDialogeBundle;
+    [SerializeField] GameObject loseDialogueBundle;
 
     [SerializeField] List<GameObject> choiceBundle = new List<GameObject>();
 
@@ -18,10 +19,12 @@ public class DialogeSystem : MonoBehaviour
 
     bool doingChoice = false;
     bool enableInput = true;
+    bool loseDueToPatiance = false;
 
     PatienceBar patienceBar;
 
     [SerializeField] float correctChoiceAdd;
+    [SerializeField] float nextDialogueAdd;
     [SerializeField] float wrongChoiceSubtract;
 
     #region Text
@@ -35,6 +38,23 @@ public class DialogeSystem : MonoBehaviour
     bool writeText = false;
 
     GameObject currentChoiceText;
+
+    #endregion
+
+    #region Jump
+
+    [Header("Jump")]
+
+    [SerializeField] GameObject jumpPos;
+
+    [SerializeField] float jumpSpeed = 5;
+
+    float timeForJumpUp;
+    float jumpAcceration = 1f;
+
+    bool startJumpUp = false;
+    bool startJumpingDown = false;
+    bool jumping = false;
 
     #endregion
 
@@ -92,12 +112,6 @@ public class DialogeSystem : MonoBehaviour
                 return;
             }
 
-            if (onWhatDialogueBundle == 1 && onWhatDialogue == 8)
-            {
-                Debug.Log("Drain");
-                patienceBar.EnableDraining();
-            }
-
             NextDialogue();
 
         }
@@ -112,7 +126,13 @@ public class DialogeSystem : MonoBehaviour
             return;
         }
 
+        if (!loseDialogueBundle)
+        {
+            patienceBar.AddAmount(nextDialogueAdd);
+        }
+
         dialogueInBundle[onWhatDialogue - 1].SetActive(false);
+
         dialogueInBundle[onWhatDialogue].SetActive(true);
         WhatTextToWrite(dialogueInBundle[onWhatDialogue].GetComponentInChildren<TextMeshProUGUI>());
 
@@ -130,7 +150,22 @@ public class DialogeSystem : MonoBehaviour
     void NextChoice()
     {
 
-        if(choiceBundle.Count > onWhatDialogueBundle)
+        if (loseDueToPatiance)
+        {
+
+            Debug.Log("LOSE");
+
+            float distanseToJumpPos = Vector2.Distance(new Vector2(jumpPos.transform.position.x/2, jumpPos.transform.position.x), transform.position);
+
+            timeForJumpUp = distanseToJumpPos * 2 / jumpSpeed;
+
+            jumpAcceration = -jumpSpeed / timeForJumpUp;
+
+            return;
+
+        }
+
+        if (choiceBundle.Count > onWhatDialogueBundle)
         {
 
             choiceBundle[onWhatDialogueBundle].SetActive(true);
@@ -154,6 +189,8 @@ public class DialogeSystem : MonoBehaviour
             return;
         }
 
+        patienceBar.EnableDraining();
+
         patienceBar.SubtractAmount(wrongChoiceSubtract);
 
         if (currentChoiceText != null)
@@ -171,7 +208,6 @@ public class DialogeSystem : MonoBehaviour
         currentChoiceText.SetActive(true);
         WhatTextToWrite(currentChoiceText.GetComponentInChildren<TextMeshProUGUI>());
 
-
     }
 
     public void RightChoice()
@@ -181,6 +217,7 @@ public class DialogeSystem : MonoBehaviour
             return;
         }
 
+        patienceBar.EnableDraining();
         patienceBar.AddAmount(correctChoiceAdd);
 
         doingChoice = false;
@@ -245,6 +282,34 @@ public class DialogeSystem : MonoBehaviour
     public void DisableInput()
     {
         enableInput = false;
+    }
+
+    public void Lose()
+    {
+
+        if(loseDueToPatiance) { return ; }
+
+        Debug.Log("LOSE 2");
+
+        loseDueToPatiance = true;
+
+        dialogeBundle[onWhatDialogueBundle].SetActive(false);
+        choiceBundle[onWhatDialogueBundle].SetActive(false);
+
+        winDialogeBundle.SetActive(true);
+
+        foreach (Transform child in loseDialogueBundle.transform)
+        {
+
+            dialogueInBundle.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+
+        }
+
+        doingChoice = false;
+
+        NextDialogue();
+
     }
 
     void WhatTextToWrite(TextMeshProUGUI textToChange)

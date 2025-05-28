@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Erics scene.unity
     guid: 16e7d5966b0bc1d45a3aba92000a1e11
+  - enabled: 1
+    path: Assets/Scenes/GameplayScene.unity
+    guid: 81453e2136e9e424496f7becbec15338
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

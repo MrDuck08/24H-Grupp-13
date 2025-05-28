@@ -389,7 +389,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 569246617577320740}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PauseAndQuitManager, Assembly-CSharp
+        m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2708895033246652360
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,7 +1057,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: I have a great idea
+  m_text: I have a great idea!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aa31ba08af35e2c44abe8d987a0b1e27, type: 2}
   m_sharedMaterial: {fileID: -163987457642058670, guid: aa31ba08af35e2c44abe8d987a0b1e27, type: 2}
@@ -1379,6 +1391,6 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Erics scene
+          m_StringArgument: GameplayScene
           m_BoolArgument: 0
         m_CallState: 2
