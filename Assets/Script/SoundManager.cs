@@ -6,6 +6,7 @@ public class SoundManager : MonoBehaviour
     [Header("SFX library")]
     public AudioClip gunShotSound;
     public AudioClip hitEnemySound, hitSomthingElseSound;
+    public AudioClip turnSound;
 
     private void Awake()
     {
