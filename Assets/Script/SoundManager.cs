@@ -5,6 +5,7 @@ public class SoundManager : MonoBehaviour
 {
     [Header("SFX library")]
     public AudioClip gunShot;
+    public AudioClip woosh;
 
     private void Awake()
     {

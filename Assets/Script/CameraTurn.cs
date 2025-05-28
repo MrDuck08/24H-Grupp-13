@@ -20,6 +20,7 @@ public class CameraTurn : MonoBehaviour
     bool presidentLook = true;
 
     DialogeSystem dialogeSystem;
+    SoundManager soundManager;
 
     private void Start()
     {
@@ -27,6 +28,7 @@ public class CameraTurn : MonoBehaviour
         transform.position = presidentCanvas.transform.position;
         wishPosition = transform.position;
 
+        soundManager = FindFirstObjectByType<SoundManager>();
         dialogeSystem = FindFirstObjectByType<DialogeSystem>();
     }
 
@@ -48,6 +50,8 @@ public class CameraTurn : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             presidentLook = !presidentLook;
+
+            soundManager.PlaySound(soundManager.woosh);
 
             if (presidentLook == false)
             {
