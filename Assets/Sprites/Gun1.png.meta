@@ -103,10 +103,10 @@ TextureImporter:
       name: Gun1_0
       rect:
         serializedVersion: 2
-        x: 95
-        y: 0
-        width: 156
-        height: 102
+        x: 40
+        y: 4
+        width: 200
+        height: 247
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Gun1_0: -4525064436962881543
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

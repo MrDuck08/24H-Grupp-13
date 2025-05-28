@@ -145,8 +145,8 @@ MonoBehaviour:
   maxConsecutiveHorizontal: 1
   maxConsecutiveVertical: 1
   startScale: 0.35
-  endScale: 1.5
-  scaleDuration: 30
+  endScale: 4
+  scaleDuration: 7
   warningTime: 3
   fallSpeed: 3
   destroyDelay: 7

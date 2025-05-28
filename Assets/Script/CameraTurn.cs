@@ -17,7 +17,7 @@ public class CameraTurn : MonoBehaviour
     float zPosition;
 
     Vector2 wishPosition;
-    bool presidentLook = true;
+    public bool presidentLook = true;
 
     DialogeSystem dialogeSystem;
     SoundManager soundManager;

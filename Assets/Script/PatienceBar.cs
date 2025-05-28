@@ -22,6 +22,7 @@ public class PatienceBar : MonoBehaviour
     [SerializeField]
     float fingerEnd;
 
+    [SerializeField]
     float patience;
     [SerializeField] float speed;
     bool isDraining;
@@ -60,7 +61,6 @@ public class PatienceBar : MonoBehaviour
         {
             patience -= speed * Time.deltaTime;
             patience = math.clamp(patience, 0.0f, 1.0f);
-            speed += acceleration;
         }
 
         // UI

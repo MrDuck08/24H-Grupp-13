@@ -70,7 +70,7 @@ public class CursorToggler : MonoBehaviour
         Debug.Log("Switched to Crosshair Mode.");
     }
 
-    void SetMouseCursorMode()
+    public void SetMouseCursorMode()
     {
         isCrosshairMode = false;
 

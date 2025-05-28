@@ -58,6 +58,7 @@ public class KamikazeDroneScript : MonoBehaviour
 
     SoundManager soundManager;
     DeathCanvasManager deathCanvasManager;
+    CursorToggler cursorToggler;
 
     enum MovementAxis { None, Horizontal, Vertical }
     MovementAxis lastChosenAxis = MovementAxis.None;
@@ -67,7 +68,7 @@ public class KamikazeDroneScript : MonoBehaviour
     void Start()
     {
         soundManager = FindAnyObjectByType<SoundManager>();
-
+        cursorToggler = FindAnyObjectByType<CursorToggler>();
         droneMovingAudioSource = GetComponent<AudioSource>();
 
         if (droneMovingAudioSource != null && movingDroneSound != null)
@@ -312,6 +313,7 @@ public class KamikazeDroneScript : MonoBehaviour
         yield return new WaitForSeconds(deathCanvasDelay);
 
         deathCanvasManager.ControllCanvasOfAndOn(true);
+        cursorToggler.SetMouseCursorMode();
         Time.timeScale = 0;
     }
 

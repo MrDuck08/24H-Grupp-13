@@ -168,7 +168,7 @@ public class DialogeSystem : MonoBehaviour
 
             }
 
-            //return;
+            return;
 
         }
 
@@ -198,7 +198,7 @@ public class DialogeSystem : MonoBehaviour
             return;
         }
 
-        if (!loseDialogueBundle)
+        if (!loseDueToPatiance)
         {
             patienceBar.AddAmount(nextDialogueAdd);
         }

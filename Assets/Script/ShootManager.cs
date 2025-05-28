@@ -6,11 +6,13 @@ public class ShootManager : MonoBehaviour
 
     private WaveSpawner waveSpawner;
     private SoundManager soundManager;
+    private CameraTurn cameraTurn;
 
     void Start()
     {
        waveSpawner = FindAnyObjectByType<WaveSpawner>();
         soundManager = FindAnyObjectByType<SoundManager>();
+        cameraTurn = FindAnyObjectByType<CameraTurn>();
     }
 
     void Update()
@@ -18,7 +20,10 @@ public class ShootManager : MonoBehaviour
         // Check if the left mouse button is clicked
         if (Input.GetMouseButtonDown(0)) // 0 is for the left mouse button
         {
-            Shoot();
+            if(!cameraTurn.presidentLook)
+            {
+                Shoot();
+            }
         }
     }
 
