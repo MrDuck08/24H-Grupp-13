@@ -191,6 +191,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad49271b75ddfa84e8b4fa2c107ce052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &198084799
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2810137930264796923, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981082627379550977, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5012815662264509737, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: gunShotSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 670a54ec5d686f5489c99bedacd01f18, type: 3}
+    - target: {fileID: 5012815662264509737, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: countdownSound
+      value: 
+      objectReference: {fileID: 8300000, guid: bf675cb2354a3244d9f5cd3702faed67, type: 3}
+    - target: {fileID: 5012815662264509737, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: explosionSound
+      value: 
+      objectReference: {fileID: 8300000, guid: dd9bd02e07f8f6c4bbbac9c9b74f6805, type: 3}
+    - target: {fileID: 5012815662264509737, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
+      propertyPath: droneDestructionSound
+      value: 
+      objectReference: {fileID: 8300000, guid: d4b36cf1e47cbda4e8fc54ca2e5fbb08, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 054ddd2bc7092a24490a921e5988d96b, type: 3}
 --- !u!1001 &576622206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -567,63 +640,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b021b9a994fc05469d040aa106709e0, type: 3}
---- !u!1001 &1392646870
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1002323372306308406, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3958463607827153138, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
-      propertyPath: m_Name
-      value: KamikazeDrone
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d52181c3bc09f7840a0e6ea45febb168, type: 3}
 --- !u!1 &1756001089
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,5 +800,5 @@ SceneRoots:
   - {fileID: 166164707}
   - {fileID: 907980141}
   - {fileID: 1045135724}
+  - {fileID: 198084799}
   - {fileID: 827903444}
-  - {fileID: 1392646870}

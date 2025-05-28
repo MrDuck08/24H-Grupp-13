@@ -8,6 +8,8 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float verticalMoveSpeed = 3f;
     [SerializeField] float minChangeDirectionTime = 1f;
     [SerializeField] float maxChangeDirectionTime = 4f;
+    [SerializeField] AudioSource droneMovingAudioSource;
+    [SerializeField] AudioClip movingDroneSound;
 
     [Header("Consecutive Direction Limits")]
     [SerializeField] int maxConsecutiveHorizontal = 3;
@@ -24,7 +26,6 @@ public class KamikazeDroneScript : MonoBehaviour
     [SerializeField] float destroyDelay = 15f;
     [SerializeField] float DroneParticalEffectTime = 0.3f;
     [SerializeField] GameObject droneParticleEffect, electicEffect, explotionEffect;
-    [SerializeField] AudioClip destructionSound, explotionSound;
     [SerializeField] float blinkTime = 0.2f;
     [SerializeField] float deathCanvasDelay = 2f;
 
@@ -54,7 +55,8 @@ public class KamikazeDroneScript : MonoBehaviour
     bool isAnimating = true;
 
     SpriteRenderer droneSprite;
-    SceneLoader sceneLoader;
+
+    SoundManager soundManager;
     DeathCanvasManager deathCanvasManager;
 
     enum MovementAxis { None, Horizontal, Vertical }
@@ -64,10 +66,20 @@ public class KamikazeDroneScript : MonoBehaviour
 
     void Start()
     {
+        soundManager = FindAnyObjectByType<SoundManager>();
+
+        droneMovingAudioSource = GetComponent<AudioSource>();
+
+        if (droneMovingAudioSource != null && movingDroneSound != null)
+        {
+            droneMovingAudioSource.clip = movingDroneSound;
+            droneMovingAudioSource.loop = true;
+        }
+
         droneSprite = GetComponentInChildren<SpriteRenderer>();
         if (droneSprite == null)
         {
-            Debug.LogError("KamikazeDroneScript requires a SpriteRenderer component on this GameObject!");
+            Debug.LogWarning("KamikazeDroneScript requires a SpriteRenderer component on this GameObject!");
             return;
         }
 
@@ -80,7 +92,7 @@ public class KamikazeDroneScript : MonoBehaviour
             Debug.LogWarning("Drone animation sprites not assigned. Animation will not play.");
         }
 
-            deathCanvasManager = FindAnyObjectByType<DeathCanvasManager>();
+        deathCanvasManager = FindAnyObjectByType<DeathCanvasManager>();
 
         droneParticleEffect.SetActive(false);
         electicEffect.SetActive(false);
@@ -100,8 +112,6 @@ public class KamikazeDroneScript : MonoBehaviour
         transform.localScale = new Vector3(startScale, startScale, 1);
 
         //Debug.Log($"Drone Moveable Bounds: X({minXPos}, {maxXPos}), Y({minYPos}, {maxYPos})");
-
-        sceneLoader = FindAnyObjectByType<SceneLoader>();
     }
 
     void Update()
@@ -111,10 +121,20 @@ public class KamikazeDroneScript : MonoBehaviour
             Movement();
             CheckForDirectionChange();
             HandleScaling();
+
+            if (droneMovingAudioSource != null && !droneMovingAudioSource.isPlaying)
+            {
+                droneMovingAudioSource.Play();
+            }
         }
         else
         {
             transform.position += Vector3.down * fallSpeed * Time.deltaTime;
+
+            if (droneMovingAudioSource != null && droneMovingAudioSource.isPlaying)
+            {
+                droneMovingAudioSource.Stop();
+            }
         }
     }
 
@@ -254,8 +274,8 @@ public class KamikazeDroneScript : MonoBehaviour
             if (!isBlinking)
             {
                 isBlinking = true;
-
-                StartCoroutine(BlinkingSprite());
+                soundManager.PlaySound(soundManager.countdownSound);
+                StartCoroutine(BlinkingCountdown());
             }
 
             if (warningTime <= 0 && !isGoingToExplode)
@@ -266,7 +286,7 @@ public class KamikazeDroneScript : MonoBehaviour
         }
     }
 
-    IEnumerator BlinkingSprite()
+    IEnumerator BlinkingCountdown()
     {
         while (!isGoingToExplode)
         {
@@ -282,6 +302,11 @@ public class KamikazeDroneScript : MonoBehaviour
     IEnumerator DroneExplode()
     {
         Debug.Log("THE DRONE HAS EXPLODED!!!!!");
+
+        isDestroyed = true;
+
+        soundManager.PlaySound(soundManager.explosionSound);
+
         Instantiate(explotionEffect, transform.position, Quaternion.identity);
 
         yield return new WaitForSeconds(deathCanvasDelay);
@@ -309,10 +334,7 @@ public class KamikazeDroneScript : MonoBehaviour
             electicEffect.SetActive(true);
         }
 
-        if (destructionSound != null)
-        {
-            AudioSource.PlayClipAtPoint(destructionSound, Camera.main.transform.position);
-        }
+        soundManager.PlaySound(soundManager.droneDestructionSound);
 
         Destroy(gameObject, destroyDelay);
     }
