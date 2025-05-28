@@ -61,6 +61,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 300
       objectReference: {fileID: 0}
+    - target: {fileID: 2598292142754387410, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
+      propertyPath: m_Name
+      value: SFXVolumeSlider
+      objectReference: {fileID: 0}
     - target: {fileID: 2602938225965244146, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -223,11 +227,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4945465315826581299, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleOptionCanvas
+      value: ToggleCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 4945465315826581299, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: OptionCanvasToggler, Assembly-CSharp
+      value: CanvasToggler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4945465315826581299, guid: b90c12e3f236c4845a8125f76a3e3218, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseAndQuitManager : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class PauseAndQuitManager : MonoBehaviour
 
     // Reference to your Pause Menu UI Panel
     [SerializeField] GameObject pauseMenuUI;
+
+    [SerializeField] GameObject optionsCanvas;
 
     void Start()
     {
@@ -28,11 +31,11 @@ public class PauseAndQuitManager : MonoBehaviour
         // Check for the Escape key press
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (GameIsPaused && optionsCanvas.activeSelf == false)
             {
                 Resume();
             }
-            else
+            else if (optionsCanvas.activeSelf == false)
             {
                 Pause();
             }
