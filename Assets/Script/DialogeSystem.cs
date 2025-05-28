@@ -92,40 +92,6 @@ public class DialogeSystem : MonoBehaviour
     private void Update()
     {
 
-        if (writeText)
-        {
-
-            timer -= Time.deltaTime;
-
-            if(timer <= 0)
-            {
-     
-                timer += timePerCharacter;
-                characterIndex++;
-                text.text = textToWrite.Substring(0, characterIndex);
-
-                if(characterIndex >= textToWrite.Length)
-                {
-
-                    writeText = false;
-
-                }
-
-            }
-
-        }
-
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice && enableInput)
-        {
-            if (onWhatDialogueBundle == 1 && onWhatDialogue == 6)
-            {
-                return;
-            }
-
-            NextDialogue();
-
-        }
-
         #region Jump
 
         if (startJumpUp)
@@ -137,7 +103,7 @@ public class DialogeSystem : MonoBehaviour
 
             president.transform.position = Vector2.MoveTowards(president.transform.position, new Vector2(jumpPos.transform.position.x - xHalfWayPos, xHalfWayPos * 2), jumpSpeed * Time.deltaTime);
 
-            if(timeForJumpUp <= 0)
+            if (timeForJumpUp <= 0)
             {
 
                 startJumpUp = false;
@@ -178,6 +144,42 @@ public class DialogeSystem : MonoBehaviour
         }
 
         #endregion
+
+        if (writeText)
+        {
+
+            timer -= Time.deltaTime;
+
+            if(timer <= 0)
+            {
+     
+                timer += timePerCharacter;
+                characterIndex++;
+                text.text = textToWrite.Substring(0, characterIndex);
+
+                if(characterIndex >= textToWrite.Length)
+                {
+
+                    writeText = false;
+
+                }
+
+            }
+
+            return;
+
+        }
+
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice && enableInput)
+        {
+            if (onWhatDialogueBundle == 1 && onWhatDialogue == 6)
+            {
+                return;
+            }
+
+            NextDialogue();
+
+        }
 
     }
 
