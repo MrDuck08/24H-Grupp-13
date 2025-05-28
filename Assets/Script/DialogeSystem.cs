@@ -130,7 +130,18 @@ public class DialogeSystem : MonoBehaviour
     void NextChoice()
     {
 
-        choiceBundle[onWhatDialogueBundle].SetActive(true);
+        if(choiceBundle.Count > onWhatDialogueBundle)
+        {
+
+            choiceBundle[onWhatDialogueBundle].SetActive(true);
+
+        }
+        else
+        {
+
+            Debug.Log("WIN");
+
+        }
 
     }
 
@@ -182,22 +193,31 @@ public class DialogeSystem : MonoBehaviour
 
         onWhatDialogueBundle++;
 
-        if (onWhatDialogue < dialogeBundle.Count)
+        if (onWhatDialogueBundle < dialogeBundle.Count)
         {
             dialogeBundle[onWhatDialogueBundle].SetActive(true);
+
+            foreach (Transform child in dialogeBundle[onWhatDialogueBundle].transform)
+            {
+
+                dialogueInBundle.Add(child.gameObject);
+                child.gameObject.SetActive(false);
+
+            }
+
         }
         else
         {
 
             winDialogeBundle.SetActive(true);
 
-        }
+            foreach (Transform child in winDialogeBundle.transform)
+            {
 
-        foreach (Transform child in dialogeBundle[onWhatDialogueBundle].transform)
-        {
+                dialogueInBundle.Add(child.gameObject);
+                child.gameObject.SetActive(false);
 
-            dialogueInBundle.Add(child.gameObject);
-            child.gameObject.SetActive(false);
+            }
 
         }
 
