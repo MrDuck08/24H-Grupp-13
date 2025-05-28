@@ -8,10 +8,19 @@ public class PatienceBar : MonoBehaviour
     Image bar;
 
     [SerializeField]
+    GameObject fingerObject;
+
+    [SerializeField]
     float startSpeed;
 
     [SerializeField]
     float acceleration;
+
+    [SerializeField]
+    float fingerStart;
+
+    [SerializeField]
+    float fingerEnd;
 
     float patience;
     [SerializeField] float speed;
@@ -55,6 +64,7 @@ public class PatienceBar : MonoBehaviour
         // UI
         bar.transform.localScale = new Vector3(patience, 1, 1);
         bar.color = new Color(1.0f - patience, patience, 0);
+        fingerObject.transform.position = new Vector3(-math.lerp(fingerEnd, fingerStart, patience) / (2 * fingerObject.transform.lossyScale.x), fingerObject.transform.position.y, fingerObject.transform.position.z);
     }
 
     /// <summary>
