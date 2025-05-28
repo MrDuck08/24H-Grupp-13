@@ -5,6 +5,10 @@ public class SoundManager : MonoBehaviour
 {
     [Header("SFX library")]
     public AudioClip gunShotSound;
+    public AudioClip hitEnemySound, hitSomthingElseSound;
+    public AudioClip hitWoodSound;
+    public AudioClip hitSofaSound;
+    public AudioClip turnSound;
     public AudioClip droneDestructionSound;
     public AudioClip explosionSound;
     public AudioClip countdownSound;
