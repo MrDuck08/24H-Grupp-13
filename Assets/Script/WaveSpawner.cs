@@ -72,7 +72,7 @@ public class WaveSpawner : MonoBehaviour
         {
             Debug.Log($"Wave {currentWaveNumber} cleared! All {enemiesPerWave} enemies spawned and destroyed.");
             waveInProgress = false; // Mark wave as truly finished (spawned and cleared)
-            float extraTime = Random.Range(0, 5);
+            float extraTime = Random.Range(0, maxAddTimeToWave);
             StartCoroutine(StartNextWaveAfterDelay(extraTime));
         }
     }

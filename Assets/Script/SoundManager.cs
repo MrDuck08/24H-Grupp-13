@@ -4,7 +4,15 @@ using UnityEngine.Audio;
 public class SoundManager : MonoBehaviour
 {
     [Header("SFX library")]
-    public AudioClip gunShot;
+    public AudioClip gunShotSound;
+    public AudioClip hitEnemySound, hitSomthingElseSound;
+    public AudioClip hitWoodSound;
+    public AudioClip hitSofaSound;
+    public AudioClip turnSound;
+    public AudioClip droneDestructionSound;
+    public AudioClip explosionSound;
+    public AudioClip countdownSound;
+
 
     private void Awake()
     {
@@ -19,11 +27,6 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            PlaySound(gunShot);
-        }
-
         //Checking if any of the AudioSources stopped playing any sound
         //Destroys them if they have
         if (this.gameObject.GetComponent<AudioSource>() != null)

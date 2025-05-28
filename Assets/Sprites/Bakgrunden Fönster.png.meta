@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "Bakgrunden F\xF6nster_0": 5230543316512628471
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
