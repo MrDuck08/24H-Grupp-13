@@ -64,10 +64,12 @@ public class DialogeSystem : MonoBehaviour
     #endregion
 
     SceneLoader sceneLoader;
+    WaveSpawner waveSpawner;
 
     private void Start()
     {
         sceneLoader = FindObjectOfType<SceneLoader>();
+        waveSpawner = FindObjectOfType<WaveSpawner>();
         patienceBar = FindFirstObjectByType<PatienceBar>();
 
         onWhatDialogueBundle = 0;
@@ -166,12 +168,17 @@ public class DialogeSystem : MonoBehaviour
 
             }
 
-            return;
+            //return;
 
         }
 
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !doingChoice && enableInput)
         {
+
+            if (onWhatDialogueBundle == 1 && onWhatDialogue == 5)
+            {
+                waveSpawner.StartNextWave();
+            }
             if (onWhatDialogueBundle == 1 && onWhatDialogue == 6)
             {
                 return;

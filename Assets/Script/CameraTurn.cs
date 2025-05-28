@@ -21,6 +21,7 @@ public class CameraTurn : MonoBehaviour
 
     DialogeSystem dialogeSystem;
     SoundManager soundManager;
+    CursorToggler cursorToggler;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class CameraTurn : MonoBehaviour
 
         soundManager = FindFirstObjectByType<SoundManager>();
         dialogeSystem = FindFirstObjectByType<DialogeSystem>();
+        cursorToggler = FindFirstObjectByType<CursorToggler>();
     }
 
     private void Update()
@@ -52,6 +54,7 @@ public class CameraTurn : MonoBehaviour
             presidentLook = !presidentLook;
 
             soundManager.PlaySound(soundManager.turnSound);
+            cursorToggler.ToggleCursorMode();
 
             if (presidentLook == false)
             {

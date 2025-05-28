@@ -39,8 +39,6 @@ public class WaveSpawner : MonoBehaviour
         }
 
         Debug.Log("Spawner Initialized with " + spawnPoints.Length + " spawn points.");
-        // Start the first wave immediately
-        StartNextWave();
     }
 
     void Update()
@@ -78,7 +76,7 @@ public class WaveSpawner : MonoBehaviour
     }
 
     // Initiates the process to start a new wave
-    void StartNextWave()// *Alex kallar på den*
+    public void StartNextWave()// *Alex kallar på den*
     {
         currentWaveNumber++;
         enemiesPerWave++;

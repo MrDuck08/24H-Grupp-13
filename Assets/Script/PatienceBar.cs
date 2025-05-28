@@ -49,57 +49,11 @@ public class PatienceBar : MonoBehaviour
 
             bar.transform.localScale = new Vector3(patience, 1, 1);
             bar.color = new Color(1.0f - patience, patience, 0);
+            fingerObject.transform.position = new Vector3(-math.lerp(fingerEnd, fingerStart, patience) / (2 * fingerObject.transform.lossyScale.x), fingerObject.transform.position.y, fingerObject.transform.position.z);
 
             return;
 
-<<<<<<< HEAD
-        }
 
-        if (isDraining == true)
-        {
-            patience -= speed * Time.deltaTime;
-            patience = math.clamp(patience, 0.0f, 1.0f);
-            speed += acceleration;
-        }
-
-        // UI
-        bar.transform.localScale = new Vector3(patience, 1, 1);
-        bar.color = new Color(1.0f - patience, patience, 0);
-    }
-
-    /// <summary>
-    /// Add patience to the president.
-    /// Patience corresponds to a value between 0.0 and 1.0 
-    /// </summary>
-    /// <param name="newValue">the value to add</param>
-    public void AddAmount(float newValue)
-    {
-        patience += newValue;
-        patience = math.clamp(patience, 0.0f, 1.0f);
-    }
-
-    /// <summary>
-    /// Subtract patience from the president.
-    /// Patience corresponds to a value between 0.0 and 1.0 
-    /// </summary>
-    /// <param name="newValue">the value to subtract</param>
-    public void SubtractAmount(float newValue)
-    {
-        patience -= newValue;
-        patience = math.clamp(patience, 0.0f, 1.0f);
-    }
-
-    public void EnableDraining()
-    {
-        isDraining = true;
-    }
-
-    public void DisableDraining()
-    {
-        isDraining = false;
-    }
-}
-=======
         }
 
         if (isDraining == true)
@@ -144,7 +98,7 @@ public class PatienceBar : MonoBehaviour
 
     public void DisableDraining()
     {
-        isDraining = true;
+        isDraining = false;
     }
 }
->>>>>>> ea108bbde7dd2e6a3b33ccf0826094dc0ed70428
+

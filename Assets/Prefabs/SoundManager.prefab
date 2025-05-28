@@ -44,6 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b20eca6c151eb5e4ead89b728b377f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunShot: {fileID: 8300000, guid: 670a54ec5d686f5489c99bedacd01f18, type: 3}
+  gunShotSound: {fileID: 8300000, guid: 5ddf1beea2eb6e74bb158da436e7e123, type: 3}
   hitEnemySound: {fileID: 8300000, guid: e64fe57e7682f794ea3bed8d08c971ea, type: 3}
   hitSomthingElseSound: {fileID: 8300000, guid: 093f10fbc8f615b4b87ef86a0c0a6622, type: 3}
+  hitWoodSound: {fileID: 8300000, guid: 610706ed04d68de4b987001e77057c52, type: 3}
+  hitSofaSound: {fileID: 8300000, guid: f004d386c1b0f5e46a90237f774395ba, type: 3}
+  turnSound: {fileID: 8300000, guid: 2296cc888a337c3498fcef38df444058, type: 3}
+  droneDestructionSound: {fileID: 8300000, guid: d4b36cf1e47cbda4e8fc54ca2e5fbb08, type: 3}
+  explosionSound: {fileID: 8300000, guid: dd9bd02e07f8f6c4bbbac9c9b74f6805, type: 3}
+  countdownSound: {fileID: 8300000, guid: bf675cb2354a3244d9f5cd3702faed67, type: 3}
