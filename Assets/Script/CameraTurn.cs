@@ -51,7 +51,7 @@ public class CameraTurn : MonoBehaviour
         {
             presidentLook = !presidentLook;
 
-            soundManager.PlaySound(soundManager.woosh);
+            soundManager.PlaySound(soundManager.turnSound);
 
             if (presidentLook == false)
             {
