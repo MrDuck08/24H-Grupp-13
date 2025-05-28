@@ -20,11 +20,6 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            PlaySound(gunShot);
-        }
-
         //Checking if any of the AudioSources stopped playing any sound
         //Destroys them if they have
         if (this.gameObject.GetComponent<AudioSource>() != null)
